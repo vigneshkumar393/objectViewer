@@ -1,4 +1,4 @@
-package com.mayvel.kpiDashboard.route;
+package com.mayvel.objectViewer.route;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;

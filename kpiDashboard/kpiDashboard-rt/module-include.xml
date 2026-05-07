@@ -1,6 +1,0 @@
-<types>
-  <!--com.mayvel.myHttpServer-->
-  <!--com.mayvel.restApiServer-->
-  <type class="com.mayvel.kpiDashboard.BRestApiServerService" name="RestApiServerService"/>
-  <type class="com.mayvel.kpiDashboard.BRestApiServer" name="RestApiServer"/>
-</types>

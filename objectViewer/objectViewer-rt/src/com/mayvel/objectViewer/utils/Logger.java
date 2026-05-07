@@ -1,4 +1,4 @@
-package com.mayvel.kpiDashboard.utils;
+package com.mayvel.objectViewer.utils;
 
 public class Logger {
     static final String DEFAULTCOLOR = "";

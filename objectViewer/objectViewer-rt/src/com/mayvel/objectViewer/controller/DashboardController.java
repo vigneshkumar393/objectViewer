@@ -1,8 +1,8 @@
-package com.mayvel.kpiDashboard.controller;
+package com.mayvel.objectViewer.controller;
 
-import com.mayvel.kpiDashboard.BRestApiServerService;
-import com.mayvel.kpiDashboard.utils.Generic;
-import com.mayvel.kpiDashboard.utils.Logger;
+import com.mayvel.objectViewer.BRestApiServerService;
+import com.mayvel.objectViewer.utils.Generic;
+import com.mayvel.objectViewer.utils.Logger;
 import com.tridium.json.JSONArray;
 import com.tridium.json.JSONObject;
 import javax.baja.control.BBooleanWritable;

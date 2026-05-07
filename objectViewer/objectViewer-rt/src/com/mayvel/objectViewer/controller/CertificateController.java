@@ -1,7 +1,6 @@
-package com.mayvel.kpiDashboard.controller;
+package com.mayvel.objectViewer.controller;
 
-import com.mayvel.kpiDashboard.BRestApiServerService;
-import com.mayvel.kpiDashboard.BRestApiServerService;
+import com.mayvel.objectViewer.BRestApiServerService;
 import com.sun.net.httpserver.HttpExchange;
 import com.tridium.json.JSONObject;
 import javax.baja.sys.Sys;

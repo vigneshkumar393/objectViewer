@@ -1,7 +1,6 @@
-package com.mayvel.kpiDashboard.route;
+package com.mayvel.objectViewer.route;
 
-import com.mayvel.kpiDashboard.controller.BmsController;
-import com.mayvel.kpiDashboard.controller.ConfigurationController;
+import com.mayvel.objectViewer.controller.ConfigurationController;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;

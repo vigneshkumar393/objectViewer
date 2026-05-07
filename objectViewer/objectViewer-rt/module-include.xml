@@ -1,0 +1,6 @@
+<types>
+  <!--com.mayvel.myHttpServer-->
+  <!--com.mayvel.restApiServer-->
+  <type class="com.mayvel.objectViewer.BRestApiServerService" name="RestApiServerService"/>
+  <type class="com.mayvel.objectViewer.BRestApiServer" name="RestApiServer"/>
+</types>

@@ -1,4 +1,4 @@
-package com.mayvel.kpiDashboard.utils;
+package com.mayvel.objectViewer.utils;
 
 import javax.baja.sys.BAbsTime;
 import java.text.SimpleDateFormat;

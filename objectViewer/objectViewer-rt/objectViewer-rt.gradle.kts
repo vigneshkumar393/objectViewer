@@ -36,7 +36,7 @@ plugins {
 description = "KPI Dashboard for IBMS"
 
 moduleManifest {
-  moduleName.set("kpiDashboard")
+  moduleName.set("objectViewer")
   runtimeProfile.set(rt)
 }
 
@@ -75,5 +75,5 @@ dependencies {
 tasks.named<Bajadoc>("bajadoc") {
   // Each of the packages you wish to include in your module's API documentation must be
   // enumerated below
-  includePackage("com.mayvel.kpiDashboard")
+  includePackage("com.mayvel.objectViewer")
 }

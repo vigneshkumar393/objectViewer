@@ -1,10 +1,10 @@
-package com.mayvel.kpiDashboard.route;
+package com.mayvel.objectViewer.route;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import com.tridium.json.JSONObject;
-import com.mayvel.kpiDashboard.controller.CertificateController;
-import com.mayvel.kpiDashboard.BRestApiServerService;
+import com.mayvel.objectViewer.controller.CertificateController;
+import com.mayvel.objectViewer.BRestApiServerService;
 
 import java.io.OutputStream;
 import java.io.IOException;

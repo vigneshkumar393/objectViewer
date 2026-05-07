@@ -1,6 +1,6 @@
-package com.mayvel.kpiDashboard.route;
-import com.mayvel.kpiDashboard.controller.DashboardController;
-import com.mayvel.kpiDashboard.utils.Logger;
+package com.mayvel.objectViewer.route;
+import com.mayvel.objectViewer.controller.DashboardController;
+import com.mayvel.objectViewer.utils.Logger;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import com.tridium.json.JSONObject;

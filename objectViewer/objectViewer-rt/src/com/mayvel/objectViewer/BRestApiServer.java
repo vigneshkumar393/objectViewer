@@ -1,6 +1,6 @@
-package com.mayvel.kpiDashboard;
+package com.mayvel.objectViewer;
 
-import com.mayvel.kpiDashboard.route.BmsRoute;
+import com.mayvel.objectViewer.route.BmsRoute;
 import com.sun.net.httpserver.HttpServer;
 
 import javax.baja.nre.annotations.NiagaraType;

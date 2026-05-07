@@ -1,6 +1,6 @@
-package com.mayvel.kpiDashboard.route;
+package com.mayvel.objectViewer.route;
 
-import com.mayvel.kpiDashboard.controller.AuthController;
+import com.mayvel.objectViewer.controller.AuthController;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import com.tridium.json.JSONObject;

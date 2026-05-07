@@ -1,6 +1,6 @@
-package com.mayvel.kpiDashboard;
+package com.mayvel.objectViewer;
 
-import com.mayvel.kpiDashboard.route.*;
+import com.mayvel.objectViewer.route.*;
 import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.HttpsConfigurator;
 import com.sun.net.httpserver.HttpsServer;

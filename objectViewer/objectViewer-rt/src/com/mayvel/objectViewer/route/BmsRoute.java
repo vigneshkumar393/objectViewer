@@ -1,12 +1,11 @@
-package com.mayvel.kpiDashboard.route;
+package com.mayvel.objectViewer.route;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import com.tridium.json.JSONObject;
-import com.mayvel.kpiDashboard.controller.BmsController;
+import com.mayvel.objectViewer.controller.BmsController;
 import javax.baja.sys.BComponent;
 import java.io.*;
-import java.util.Scanner;
 
 public class BmsRoute {
 
