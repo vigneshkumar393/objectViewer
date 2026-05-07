@@ -67,8 +67,8 @@ public class BRestApiServerService extends BAbstractService
     private HttpServer server;
 //region /*+ ------------ BEGIN BAJA AUTO GENERATED CODE ------------ +*/
 //@formatter:off
-/*@ $com.mayvel.kpiDashboard.BRestApiServerService(3231802199)1.0$ @*/
-/* Generated Mon Nov 24 14:45:53 IST 2025 by Slot-o-Matic (c) Tridium, Inc. 2012-2025 */
+/*@ $com.mayvel.objectViewer.BRestApiServerService(3231802199)1.0$ @*/
+/* Generated Thu May 07 10:18:03 IST 2026 by Slot-o-Matic (c) Tridium, Inc. 2012-2026 */
 
   //region Property "username"
 

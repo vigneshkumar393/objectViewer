@@ -14,8 +14,8 @@ import java.net.InetSocketAddress;
 public class BRestApiServer extends BComponent {
 //region /*+ ------------ BEGIN BAJA AUTO GENERATED CODE ------------ +*/
 //@formatter:off
-/*@ $com.mayvel.kpiDashboard.BRestApiServer(2979906276)1.0$ @*/
-/* Generated Mon Nov 24 14:45:53 IST 2025 by Slot-o-Matic (c) Tridium, Inc. 2012-2025 */
+/*@ $com.mayvel.objectViewer.BRestApiServer(2979906276)1.0$ @*/
+/* Generated Thu May 07 10:18:03 IST 2026 by Slot-o-Matic (c) Tridium, Inc. 2012-2026 */
 
   //region Type
 

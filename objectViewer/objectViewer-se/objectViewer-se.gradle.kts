@@ -33,10 +33,10 @@ plugins {
   id("com.tridium.convention.niagara-home-repositories")
 }
 
-description = "KPI Dashboard for IBMS"
+description = "Object viewer"
 
 moduleManifest {
-  moduleName.set("kpiDashboard")
+  moduleName.set("objectViewer")
   runtimeProfile.set(se)
 }
 
@@ -56,5 +56,5 @@ dependencies {
 tasks.named<Bajadoc>("bajadoc") {
   // Each of the packages you wish to include in your module's API documentation must be
   // enumerated below
-  includePackage("com.mayvel.kpiDashboard.se")
+  includePackage("com.mayvel.objectViewer.se")
 }

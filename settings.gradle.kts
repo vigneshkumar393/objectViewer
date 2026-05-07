@@ -131,4 +131,4 @@ configure<MultiProjectExtension> {
   findProjects()
 }
 
-rootProject.name = "kpiDashboard"
+rootProject.name = "objectViewer"

@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<niagara-module moduleName="kpiDashboard" preferredSymbol="KPI" runtimeProfiles="rt,wb,se"/>
+<niagara-module moduleName="objectViewer" preferredSymbol="KPI" runtimeProfiles="rt,wb,se"/>
