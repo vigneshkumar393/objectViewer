@@ -1,68 +1,11 @@
-package com.mayvel.objectViewer.route;
-
-import com.mayvel.objectViewer.controller.ConfigurationController;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-import com.sun.net.httpserver.HttpServer;
-import com.tridium.json.JSONObject;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
-public class ObjectViewerRoute {
-
-    public static void registerRoutes(HttpServer server) {
-        server.createContext("/objectviewer", new ObjectViewerHandler());
-        ModelFileRoute.register(server);
-
-    }
-
-    static class  ObjectViewerHandler implements HttpHandler {
-        @Override
-        public void handle(HttpExchange exchange) throws IOException {
-
-            String html =
-                    "<!DOCTYPE html>\n" +
-                            "<html lang=\"en\">\n" +
-                            "\n" +
-                            "<head>\n" +
-                            "    <meta charset=\"UTF-8\">\n" +
-                            "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n" +
-                            "    <title>3D Model Viewer</title>\n" +
-                            "    <style>\n" +
-                            ".top-bar {\n" +
-                            "    width: 100%;\n" +
-                            "    height: 60px;\n" +
-                            "    background: #2f3640;\n" +
-                            "    color: white;\n" +
-                            "    display: flex;\n" +
-                            "    justify-content: space-between;\n" +
-                            "    align-items: center;\n" +
-                            "    padding: 0 20px;\n" +
-                            "    position: fixed;\n" +
-                            "    top: 0;\n" +
-                            "    left: 0;\n" +
-                            "    z-index: 1000;\n" +
-                            "}\n" +
-                            "\n" +
-                            ".top-bar button {\n" +
-                            "    padding: 6px 12px;\n" +
-                            "    border: none;\n" +
-                            "    border-radius: 5px;\n" +
-                            "    cursor: pointer;\n" +
-                            "}\n" +
-                            "\n" +
-                            ".top-bar button:last-child {\n" +
-                            "    background: #e84118;\n" +
-                            "    color: white;\n" +
-                            "}\n" +
-                            "\n" +
-                            ".top-bar button:first-child {\n" +
-                            "    background: #40739e;\n" +
-                            "    color: white;\n" +
-                            "}"+
+<!DOCTYPE html>\n" +
+"<html lang=\"en\">\n" +
+"\n" +
+"<head>\n" +
+    "    <meta charset=\"UTF-8\">\n" +
+    "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n" +
+    "    <title>3D Model Viewer</title>\n" +
+    "    <style>\n" +
                             "        :root {\n" +
                             "            color-scheme: light;\n" +
                             "            --bg: #eef3f7;\n" +
@@ -94,8 +37,7 @@ public class ObjectViewerRoute {
                             "\n" +
                             "        .app-container {\n" +
                             "            display: flex;\n" +
-                            "            height: calc(100vh - 60px);\n" +
-                            "            margin-top: 60px;\n" +
+                            "            height: 100vh;\n" +
                             "            background: radial-gradient(circle at center, #ffffff 0%, var(--bg-color) 100%);\n" +
                             "        }\n" +
                             "\n" +
@@ -306,90 +248,76 @@ public class ObjectViewerRoute {
                             "            100% { transform: translateX(200%); }\n" +
                             "        }\n" +
                             "    </style>\n" +
-                            "</head>\n" +
-                            "\n" +
-                            "<body>\n" +
-                            "<div class=\"top-bar\">\n" +
-                            "    <div>3D Object Viewer</div>\n" +
-                            "    <div style=\"display:flex; gap:10px;\">\n" +
-                            "        <button onclick=\"openSettings()\">⚙️</button>\n" +
-                            "        <button onclick=\"logout()\">Logout</button>\n" +
-                            "    </div>\n" +
-                            "</div>"+
-                            "    <div id=\"loaderOverlay\" style=\"display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.7); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 9999; flex-direction: column; align-items: center; justify-content: center;\">\n" +
-                            "        <div style=\"width: 40px; height: 40px; border: 4px solid rgba(37, 99, 235, 0.2); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 16px;\"></div>\n" +
-                            "        <div id=\"loaderText\" style=\"font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 12px;\">Loading...</div>\n" +
-                            "        <div style=\"width: 240px; height: 6px; background: rgba(0,0,0,0.1); border-radius: 3px; overflow: hidden; margin-bottom: 8px; position: relative;\">\n" +
-                            "            <div id=\"loaderProgressBar\" style=\"width: 0%; height: 100%; background: var(--accent); transition: width 0.2s; position: absolute; left: 0;\"></div>\n" +
-                            "        </div>\n" +
-                            "        <div id=\"loaderPercent\" style=\"font-size: 13px; color: var(--muted); font-weight: 500;\"></div>\n" +
-                            "    </div>\n" +
-                            "    <main class=\"app-container\">\n" +
-                            "        <section class=\"sidebar\">\n" +
-                            "            <div class=\"sidebar-header\">\n" +
-                            "                <h2>Models</h2>\n" +
-                            "                <button id=\"newFolderBtn\" class=\"cam-btn\" title=\"New Folder\" style=\"padding: 4px 10px; font-size: 16px; border: 1px solid var(--panel-border);\">+</button>\n" +
-                            "            </div>\n" +
-                            "\n" +
-                            "            <div id=\"fileBrowser\" class=\"file-browser\">\n" +
-                            "                <!-- virtual fs rendered here -->\n" +
-                            "            </div>\n" +
-                            "\n" +
-                            "            <input id=\"fileInput\" type=\"file\" accept=\".glb,model/gltf-binary\" style=\"display: none;\">\n" +
-                            "\n" +
-                            "            <div class=\"status-container\">\n" +
-                            "                <div id=\"uploadProgressContainer\" style=\"display: none; height: 6px; background: rgba(0,0,0,0.05); border-radius: 3px; margin-bottom: 8px;\">\n" +
-                            "                    <div class=\"progress-bar\" id=\"progressBar\"></div>\n" +
-                            "                </div>\n" +
-                            "                <p id=\"status\" class=\"status\">Viewer ready.</p>\n" +
-                            "            </div>\n" +
-                            "        </section>\n" +
-                            "\n" +
-                            "        <section class=\"viewer-shell\">\n" +
-                            "            <div class=\"viewer-badge\">Orbit: drag to rotate, scroll to zoom</div>\n" +
-                            "            <div id=\"cameraNav\" class=\"camera-nav\" style=\"display: none;\">\n" +
-                            "                <!-- Buttons will be injected here dynamically -->\n" +
-                            "            </div>\n" +
-                            "            <div id=\"tagCreatorUI\"\n" +
-                            "                style=\"display: none; position: absolute; top: 80px; right: 24px; background: rgba(255,255,255,0.95); padding: 16px; border-radius: 8px; box-shadow: 0 18px 45px rgba(22, 39, 56, 0.14); z-index: 1000; min-width: 250px; font-size: 14px; border: 1px solid rgba(20, 42, 61, 0.14);\">\n" +
-                            "                <h4 style=\"margin: 0 0 12px 0; color: var(--text);\">Create New Tag</h4>\n" +
-                            "                <div style=\"margin-bottom: 12px;\">\n" +
-                            "                    <label style=\"display: block; margin-bottom: 4px; color: var(--muted); font-weight: 500;\">Tag\n" +
-                            "                        Name</label>\n" +
-                            "                    <input type=\"text\" id=\"tagNameInput\" placeholder=\"e.g. Filter Check\"\n" +
-                            "                        style=\"width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;\">\n" +
-                            "                </div>\n" +
-                            "                <div style=\"margin-bottom: 16px;\">\n" +
-                            "                    <label style=\"display: block; margin-bottom: 4px; color: var(--muted); font-weight: 500;\">Focus\n" +
-                            "                        Part</label>\n" +
-                            "                    <div id=\"tagTargetDisplay\"\n" +
-                            "                        style=\"width: 100%; padding: 8px; background: #f0f4f8; border: 1px solid #d9e4ec; border-radius: 4px; box-sizing: border-box; color: var(--text); min-height: 35px; word-break: break-all;\">\n" +
-                            "                        Click a part on the 3D model...</div>\n" +
-                            "                </div>\n" +
-                            "                <div style=\"display: flex; gap: 8px; justify-content: flex-end;\">\n" +
-                            "                    <button onclick=\"cancelCreateTag()\"\n" +
-                            "                        style=\"padding: 6px 12px; border: 1px solid #ccc; background: white; border-radius: 4px; cursor: pointer;\">Cancel</button>\n" +
-                            "                    <button onclick=\"saveNewTag()\"\n" +
-                            "                        style=\"padding: 6px 12px; border: none; background: var(--accent); color: white; border-radius: 4px; cursor: pointer; font-weight: 500;\">Save\n" +
-                            "                        Tag</button>\n" +
-                            "                </div>\n" +
-                            "            </div>\n" +
-                            "            <div class=\"viewer-badge\" style=\"top: auto; bottom: 18px;\">Orbit: drag to rotate, scroll to zoom</div>\n" +
-                            "            <div id=\"viewer\"></div>\n" +
-                            "        </section>\n" +
-                            "    </main>\n" +
-                            "    <script src=\"https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js\"></script>\n" +
-                            "    <script src=\"https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js\"></script>\n" +
-                            "    <script src=\"https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js\"></script>\n" +
-                            "    <script src=\"https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js\"></script>\n" +
-                            "    <script>\n" +
-                            "function logout() {\n" +
-                            "    window.location.href = \"/\";\n" +
-                            "}\n" +
-                            "\n" +
-                            "function openSettings() {\n" +
-                            "    alert(\"Settings coming soon\");\n" +
-                            "}"+
+    "</head>\n" +
+"\n" +
+"<body>\n" +
+"    <div id=\"loaderOverlay\" style=\"display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.7); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 9999; flex-direction: column; align-items: center; justify-content: center;\">\n" +
+"        <div style=\"width: 40px; height: 40px; border: 4px solid rgba(37, 99, 235, 0.2); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 16px;\"></div>\n" +
+"        <div id=\"loaderText\" style=\"font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 12px;\">Loading...</div>\n" +
+"        <div style=\"width: 240px; height: 6px; background: rgba(0,0,0,0.1); border-radius: 3px; overflow: hidden; margin-bottom: 8px; position: relative;\">\n" +
+"            <div id=\"loaderProgressBar\" style=\"width: 0%; height: 100%; background: var(--accent); transition: width 0.2s; position: absolute; left: 0;\"></div>\n" +
+"        </div>\n" +
+"        <div id=\"loaderPercent\" style=\"font-size: 13px; color: var(--muted); font-weight: 500;\"></div>\n" +
+"    </div>\n" +
+"    <main class=\"app-container\">\n" +
+    "        <section class=\"sidebar\">\n" +
+        "            <div class=\"sidebar-header\">\n" +
+            "                <h2>Models</h2>\n" +
+            "                <button id=\"newFolderBtn\" class=\"cam-btn\" title=\"New Folder\" style=\"padding: 4px 10px; font-size: 16px; border: 1px solid var(--panel-border);\">+</button>\n" +
+            "            </div>\n" +
+        "\n" +
+        "            <div id=\"fileBrowser\" class=\"file-browser\">\n" +
+            "                <!-- virtual fs rendered here -->\n" +
+            "            </div>\n" +
+        "\n" +
+        "            <input id=\"fileInput\" type=\"file\" accept=\".glb,model/gltf-binary\" style=\"display: none;\">\n" +
+        "\n" +
+        "            <div class=\"status-container\">\n" +
+            "                <div id=\"uploadProgressContainer\" style=\"display: none; height: 6px; background: rgba(0,0,0,0.05); border-radius: 3px; margin-bottom: 8px;\">\n" +
+            "                    <div class=\"progress-bar\" id=\"progressBar\"></div>\n" +
+            "                </div>\n" +
+        "                <p id=\"status\" class=\"status\">Viewer ready.</p>\n" +
+        "            </div>\n" +
+        "        </section>\n" +
+    "\n" +
+    "        <section class=\"viewer-shell\">\n" +
+        "            <div class=\"viewer-badge\">Orbit: drag to rotate, scroll to zoom</div>\n" +
+        "            <div id=\"cameraNav\" class=\"camera-nav\" style=\"display: none;\">\n" +
+        "                <!-- Buttons will be injected here dynamically -->\n" +
+        "            </div>\n" +
+        "            <div id=\"tagCreatorUI\"\n" +
+        "                style=\"display: none; position: absolute; top: 80px; right: 24px; background: rgba(255,255,255,0.95); padding: 16px; border-radius: 8px; box-shadow: 0 18px 45px rgba(22, 39, 56, 0.14); z-index: 1000; min-width: 250px; font-size: 14px; border: 1px solid rgba(20, 42, 61, 0.14);\">\n" +
+        "                <h4 style=\"margin: 0 0 12px 0; color: var(--text);\">Create New Tag</h4>\n" +
+        "                <div style=\"margin-bottom: 12px;\">\n" +
+        "                    <label style=\"display: block; margin-bottom: 4px; color: var(--muted); font-weight: 500;\">Tag\n" +
+        "                        Name</label>\n" +
+        "                    <input type=\"text\" id=\"tagNameInput\" placeholder=\"e.g. Filter Check\"\n" +
+        "                        style=\"width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;\">\n" +
+        "                </div>\n" +
+        "                <div style=\"margin-bottom: 16px;\">\n" +
+        "                    <label style=\"display: block; margin-bottom: 4px; color: var(--muted); font-weight: 500;\">Focus\n" +
+        "                        Part</label>\n" +
+        "                    <div id=\"tagTargetDisplay\"\n" +
+        "                        style=\"width: 100%; padding: 8px; background: #f0f4f8; border: 1px solid #d9e4ec; border-radius: 4px; box-sizing: border-box; color: var(--text); min-height: 35px; word-break: break-all;\">\n" +
+        "                        Click a part on the 3D model...</div>\n" +
+        "                </div>\n" +
+        "                <div style=\"display: flex; gap: 8px; justify-content: flex-end;\">\n" +
+        "                    <button onclick=\"cancelCreateTag()\"\n" +
+        "                        style=\"padding: 6px 12px; border: 1px solid #ccc; background: white; border-radius: 4px; cursor: pointer;\">Cancel</button>\n" +
+        "                    <button onclick=\"saveNewTag()\"\n" +
+        "                        style=\"padding: 6px 12px; border: none; background: var(--accent); color: white; border-radius: 4px; cursor: pointer; font-weight: 500;\">Save\n" +
+        "                        Tag</button>\n" +
+        "                </div>\n" +
+        "            </div>\n" +
+        "            <div class=\"viewer-badge\" style=\"top: auto; bottom: 18px;\">Orbit: drag to rotate, scroll to zoom</div>\n" +
+        "            <div id=\"viewer\"></div>\n" +
+        "        </section>\n" +
+    "    </main>\n" +
+"    <script src=\"https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js\"></script>\n" +
+"    <script src=\"https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js\"></script>\n" +
+"    <script src=\"https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js\"></script>\n" +
+"    <script src=\"https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js\"></script>\n" +
+"    <script>\n" +
                             "        let virtualFS = [\n" +
                             "            {\n" +
                             "                id: 'folder-1',\n" +
@@ -1206,50 +1134,6 @@ public class ObjectViewerRoute {
                             "            setStatus(\"3D library could not load from cdn.jsdelivr.net.\");\n" +
                             "        });\n" +
                             "    </script>\n" +
-                            "</body>\n" +
-                            "\n" +
-                            "</html>";
-
-
-            exchange.getResponseHeaders().add("Content-Type", "text/html; charset=UTF-8");
-            exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "http://localhost:8080"); // or your Niagara URL
-            exchange.getResponseHeaders().add("Access-Control-Allow-Credentials", "true");
-            exchange.sendResponseHeaders(200, html.getBytes().length);
-
-            try (OutputStream os = exchange.getResponseBody()) {
-                os.write(html.getBytes());
-            }
-        }
-    }
-
-
-
-    // common handler wrapper for error and response handling
-// common handler wrapper for error and response handling
-    private static void handle(HttpExchange exchange, RouteAction action) throws IOException {
-        try {
-            JSONObject response = action.execute();
-            sendJsonResponse(exchange, response);
-        } catch (Exception e) {
-            JSONObject error = new JSONObject();
-            error.put("status", "error");
-            error.put("message", e.getMessage());
-            sendJsonResponse(exchange, error);
-        }
-    }
-
-    private static void sendJsonResponse(HttpExchange exchange, JSONObject json) throws IOException {
-        String response = json.toString();
-        exchange.getResponseHeaders().set("Content-Type", "application/json");
-        exchange.sendResponseHeaders(200, response.getBytes().length);
-        try (OutputStream os = exchange.getResponseBody()) {
-            os.write(response.getBytes());
-        }
-    }
-
-    // functional interface for route logic
-    @FunctionalInterface
-    private interface RouteAction {
-        JSONObject execute() throws Exception;
-    }
-}
+"</body>\n" +
+"\n" +
+"</html>
