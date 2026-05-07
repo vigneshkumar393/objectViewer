@@ -5,7 +5,7 @@
         <!--        <p m="dtl=myHttpServer" t="dtl:HttpServer" n="HttpServer" />-->
 
         <!-- Your custom HTTP server service -->
-        <p m="dtl=kpiDashboard" t="dtl:RestApiServerService" n="RestApiServer"/>
+        <p m="dtl=objectViewer" t="dtl:RestApiServerService" n="RestApiServer"/>
     </p>
 
 </bajaObjectGraph>

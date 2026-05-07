@@ -88,8 +88,8 @@ public class LoginRoute {
                             "            // Store token in localStorage for API calls\n" +
                             "            localStorage.setItem('token', data.token);\n" +
                             "\n" +
-                            "            // Redirect to configuration page\n" +
-                            "            setTimeout(() => window.location.href='/configuration', 1000);\n" +
+                            "            // Redirect to objectviewer page\n" +
+                            "            setTimeout(() => window.location.href='/objectviewer', 1000);\n" +
                             "        } else {\n" +
                             "            messageEl.style.color = 'red';\n" +
                             "            messageEl.textContent = data.message || 'Login failed';\n" +

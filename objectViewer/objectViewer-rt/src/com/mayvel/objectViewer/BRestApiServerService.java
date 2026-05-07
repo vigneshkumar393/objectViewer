@@ -365,7 +365,7 @@ public class BRestApiServerService extends BAbstractService
         BmsRoute.registerRoutes(server, Sys.getStation().getParentComponent());
         AuthRoute.registerRoutes(server, this);
         LoginRoute.registerRoutes(server);
-        ConfigurationRoute.registerRoutes(server);
+        ObjectViewerRoute.registerRoutes(server);
         CertificateUploadRoute.registerRoutes(server,this);
         DashboardRoute.registerRoutes(server,this);
 
@@ -441,8 +441,8 @@ public class BRestApiServerService extends BAbstractService
         // Add Login page route
         LoginRoute.registerRoutes(server);
 
-        // Add Configuration page route
-        ConfigurationRoute.registerRoutes(server);
+        // Add ObjectViewer page route
+        ObjectViewerRoute.registerRoutes(server);
 
         CertificateUploadRoute.registerRoutes(server,this);
 
