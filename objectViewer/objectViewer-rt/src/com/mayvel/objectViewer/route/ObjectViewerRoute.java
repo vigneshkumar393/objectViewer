@@ -331,9 +331,30 @@ public class ObjectViewerRoute {
                     + "@keyframes spin { to { transform:rotate(360deg); } }\n"
                     + "@keyframes indeterminate { 0% { transform:translateX(-200%); } 100% { transform:translateX(200%); } }\n"
 // ── Point search dropdown styles ──
-                    + ".point-search-wrap { position:relative; }\n"
+                    + ".point-search-wrap {\n" +
+                    "  position: relative;\n" +
+                    "  width: 100%;\n" +
+                    "}\n"
                     + ".point-search-input { width:100%; padding:8px 10px; border:1px solid #ccc; border-radius:4px; font-size:13px; box-sizing:border-box; }\n"
-                    + ".point-dropdown { position:fixed; max-height:320px; overflow-y:auto; background:#fff; border:1px solid #b0bec5; border-radius:6px; z-index:99999; box-shadow:0 8px 32px rgba(0,0,0,0.18); min-width:340px; }\n"
+                    + ".point-dropdown {\n" +
+                    "  position: absolute;\n" +
+                    "  top: calc(100% + 4px);\n" +
+                    "  left: 0;\n" +
+                    "  right: 0;\n" +
+                    "\n" +
+                    "  max-height: 260px;\n" +
+                    "  overflow-y: auto;\n" +
+                    "\n" +
+                    "  background: #fff;\n" +
+                    "  border: 1px solid #d0d7de;\n" +
+                    "  border-radius: 8px;\n" +
+                    "\n" +
+                    "  z-index: 1000;\n" +
+                    "\n" +
+                    "  box-shadow: 0 8px 24px rgba(0,0,0,0.12);\n" +
+                    "\n" +
+                    "  width: 100%;\n" +
+                    "}\n"
                     + ".point-dropdown-item { padding:10px 12px; cursor:pointer; font-size:13px; color:var(--text); border-bottom:1px solid #f0f0f0; }\n"
                     + ".point-dropdown-item:last-child { border-bottom:none; }\n"
                     + ".point-dropdown-item:hover { background:rgba(12,124,89,0.08); color:var(--accent); }\n"
@@ -531,10 +552,6 @@ public class ObjectViewerRoute {
                     + "  const inp = document.getElementById('pointSearchInput');\n"
                     + "  const dd  = document.getElementById('pointDropdown');\n"
                     + "  // Position fixed dropdown under the input\n"
-                    + "  const rect = inp.getBoundingClientRect();\n"
-                    + "  dd.style.top   = (rect.bottom + 2) + 'px';\n"
-                    + "  dd.style.left  = rect.left + 'px';\n"
-                    + "  dd.style.width = Math.max(rect.width, 340) + 'px';\n"
                     + "  renderPointDropdown(items);\n"
                     + "}\n"
                     + "function renderPointDropdown(items) {\n"
@@ -561,7 +578,6 @@ public class ObjectViewerRoute {
                     + "  selectedPointPath = pt.path;\n"
                     + "  selectedPointName = pt.name;\n"
                     + "  document.getElementById('pointSearchInput').value = pt.displayName || pt.name;\n"
-                    + "  document.getElementById('pointDropdown').style.display = 'none';\n"
                     + "  const disp = document.getElementById('selectedPointDisplay');\n"
                     + "  disp.style.display = 'block';\n"
                     + "  disp.innerHTML = '\\u2705 <strong>' + pt.name + '</strong><br><span style=\"word-break:break-all;\">' + pt.path + '</span>';\n"
