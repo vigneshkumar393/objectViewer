@@ -154,7 +154,7 @@ public class ObjectViewerRoute {
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    // LIST POINTS HANDLER — walks the station tree and collects BStatusValue points
+    // LIST POINTS HANDLER
     // ─────────────────────────────────────────────────────────────────────────
     static class ListPointsHandler implements HttpHandler {
         @Override
@@ -176,11 +176,10 @@ public class ObjectViewerRoute {
         }
 
         private void collectPoints(BComponent comp, String path, JSONArray out, int depth) {
-            if (depth > 10) return; // guard against deep recursion
+            if (depth > 10) return;
             try {
                 for (Slot slot : comp.getSlots()) {
                     try {
-                        // BComponent.get() requires the slot name as a String
                         BObject child = comp.get(slot.getName());
                         if (child == null) continue;
 
@@ -188,7 +187,6 @@ public class ObjectViewerRoute {
 
                         if (child instanceof BStatusValue) {
                             JSONObject pt = new JSONObject();
-                            // Use slot name as short label, full childPath as display name for search
                             String cleanName = slot.getName()
                                     .replace("$20", " ")
                                     .replace("%20", " ")
@@ -224,8 +222,7 @@ public class ObjectViewerRoute {
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    // GET POINT VALUE HANDLER — returns live value for a given station path
-    // Query: ?path=station:|slot:/Config/...
+    // GET POINT VALUE HANDLER
     // ─────────────────────────────────────────────────────────────────────────
     static class GetPointValueHandler implements HttpHandler {
         @Override
@@ -327,207 +324,83 @@ public class ObjectViewerRoute {
                     + ".camera-nav { position:absolute; top:24px; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:12px; z-index:10; background:rgba(240,244,248,0.45); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); padding:14px 18px; border-radius:24px; box-shadow:0 12px 40px rgba(0,0,0,0.08),inset 0 1px 2px rgba(255,255,255,0.8); border:1px solid rgba(255,255,255,0.5); max-width:85%; }\n"
                     + ".cam-btn { background:rgba(255,255,255,0.95); border:1px solid rgba(0,0,0,0.04); color:var(--text); padding:10px 18px; border-radius:24px; font-size:11px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:6px; transition:all 0.3s cubic-bezier(0.2,0.8,0.2,1); text-transform:uppercase; letter-spacing:0.5px; white-space:nowrap; flex-shrink:0; box-shadow:0 2px 8px rgba(0,0,0,0.04); }\n"
                     + ".cam-btn:hover { background:var(--accent); color:white; transform:translateY(-2px) scale(1.02); box-shadow:0 8px 20px rgba(37,99,235,0.25); border-color:var(--accent); }\n"
-                    +".remote-control {\n" +
-                    "\n" +
-                    "  position: absolute;\n" +
-                    "\n" +
-                    "  right: 24px;\n" +
-                    "  bottom: 90px;\n" +
-                    "\n" +
-                    "  z-index: 3000;\n" +
-                    "\n" +
-                    "  display: flex;\n" +
-                    "  flex-direction: column;\n" +
-                    "  align-items: center;\n" +
-                    "\n" +
-                    "  gap: 12px;\n" +
-                    "}\n" +
-                    "\n" +
-                    ".zoom-btn,\n" +
-                    ".home-btn {\n" +
-                    "\n" +
-                    "  width: 44px;\n" +
-                    "  height: 44px;\n" +
-                    "\n" +
-                    "  border: 1px solid #dbe4ec;\n" +
-                    "\n" +
-                    "  border-radius: 12px;\n" +
-                    "\n" +
-                    "  background: rgba(255,255,255,0.96);\n" +
-                    "\n" +
-                    "  color: #334155;\n" +
-                    "\n" +
-                    "  font-size: 20px;\n" +
-                    "  font-weight: 600;\n" +
-                    "\n" +
-                    "  cursor: pointer;\n" +
-                    "\n" +
-                    "  box-shadow:\n" +
-                    "      0 2px 8px rgba(15,23,42,0.08);\n" +
-                    "\n" +
-                    "  transition: background 0.2s;\n" +
-                    "}\n" +
-                    "\n" +
-                    ".zoom-btn:hover,\n" +
-                    ".home-btn:hover {\n" +
-                    "\n" +
-                    "  background: #f1f5f9;\n" +
-                    "}\n" +
-                    "\n" +
-                    ".joystick {\n" +
-                    "\n" +
-                    "  position: relative;\n" +
-                    "\n" +
-                    "  width: 110px;\n" +
-                    "  height: 110px;\n" +
-                    "\n" +
-                    "  border-radius: 50%;\n" +
-                    "\n" +
-                    "  background: rgba(255,255,255,0.96);\n" +
-                    "\n" +
-                    "  border: 1px solid #dbe4ec;\n" +
-                    "\n" +
-                    "  box-shadow:\n" +
-                    "      0 4px 14px rgba(15,23,42,0.08);\n" +
-                    "}\n" +
-                    "\n" +
-                    ".joy-btn {\n" +
-                    "\n" +
-                    "  position: absolute;\n" +
-                    "\n" +
-                    "  width: 34px;\n" +
-                    "  height: 34px;\n" +
-                    "\n" +
-                    "  border: none;\n" +
-                    "\n" +
-                    "  border-radius: 10px;\n" +
-                    "\n" +
-                    "  background: #f8fafc;\n" +
-                    "\n" +
-                    "  color: #475569;\n" +
-                    "\n" +
-                    "  font-size: 14px;\n" +
-                    "  font-weight: bold;\n" +
-                    "\n" +
-                    "  cursor: pointer;\n" +
-                    "\n" +
-                    "  display: flex;\n" +
-                    "  align-items: center;\n" +
-                    "  justify-content: center;\n" +
-                    "\n" +
-                    "  box-shadow:\n" +
-                    "      inset 0 1px 1px rgba(255,255,255,0.7),\n" +
-                    "      0 1px 3px rgba(0,0,0,0.08);\n" +
-                    "}\n" +
-                    "\n" +
-                    ".joy-btn:hover {\n" +
-                    "\n" +
-                    "  background: #e2e8f0;\n" +
-                    "}\n" +
-                    "\n" +
-                    ".joy-btn:active {\n" +
-                    "\n" +
-                    "  background: #cbd5e1;\n" +
-                    "}\n" +
-                    "\n" +
-                    ".joy-up {\n" +
-                    "\n" +
-                    "  top: 8px;\n" +
-                    "  left: 50%;\n" +
-                    "\n" +
-                    "  transform: translateX(-50%);\n" +
-                    "}\n" +
-                    "\n" +
-                    ".joy-down {\n" +
-                    "\n" +
-                    "  bottom: 8px;\n" +
-                    "  left: 50%;\n" +
-                    "\n" +
-                    "  transform: translateX(-50%);\n" +
-                    "}\n" +
-                    "\n" +
-                    ".joy-left {\n" +
-                    "\n" +
-                    "  left: 8px;\n" +
-                    "  top: 50%;\n" +
-                    "\n" +
-                    "  transform: translateY(-50%);\n" +
-                    "}\n" +
-                    "\n" +
-                    ".joy-right {\n" +
-                    "\n" +
-                    "  right: 8px;\n" +
-                    "  top: 50%;\n" +
-                    "\n" +
-                    "  transform: translateY(-50%);\n" +
-                    "}\n" +
-                    "\n" +
-                    ".joy-center {\n" +
-                    "\n" +
-                    "  position: absolute;\n" +
-                    "\n" +
-                    "  width: 34px;\n" +
-                    "  height: 34px;\n" +
-                    "\n" +
-                    "  left: 50%;\n" +
-                    "  top: 50%;\n" +
-                    "\n" +
-                    "  transform: translate(-50%, -50%);\n" +
-                    "\n" +
-                    "  border-radius: 50%;\n" +
-                    "\n" +
-                    "  background: #0c7c59;\n" +
-                    "\n" +
-                    "  box-shadow:\n" +
-                    "      0 0 8px rgba(12,124,89,0.25);\n" +
-                    "\n" +
-                    "  pointer-events: none;\n" +
-                    "}"
+                    + ".remote-control { position:absolute; right:24px; bottom:90px; z-index:3000; display:flex; flex-direction:column; align-items:center; gap:12px; }\n"
+                    + ".zoom-btn, .home-btn { width:44px; height:44px; border:1px solid #dbe4ec; border-radius:12px; background:rgba(255,255,255,0.96); color:#334155; font-size:20px; font-weight:600; cursor:pointer; box-shadow:0 2px 8px rgba(15,23,42,0.08); transition:background 0.2s; }\n"
+                    + ".zoom-btn:hover, .home-btn:hover { background:#f1f5f9; }\n"
+                    + ".joystick { position:relative; width:110px; height:110px; border-radius:50%; background:rgba(255,255,255,0.96); border:1px solid #dbe4ec; box-shadow:0 4px 14px rgba(15,23,42,0.08); }\n"
+                    + ".joy-btn { position:absolute; width:34px; height:34px; border:none; border-radius:10px; background:#f8fafc; color:#475569; font-size:14px; font-weight:bold; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:inset 0 1px 1px rgba(255,255,255,0.7),0 1px 3px rgba(0,0,0,0.08); }\n"
+                    + ".joy-btn:hover { background:#e2e8f0; }\n"
+                    + ".joy-btn:active { background:#cbd5e1; }\n"
+                    + ".joy-up { top:8px; left:50%; transform:translateX(-50%); }\n"
+                    + ".joy-down { bottom:8px; left:50%; transform:translateX(-50%); }\n"
+                    + ".joy-left { left:8px; top:50%; transform:translateY(-50%); }\n"
+                    + ".joy-right { right:8px; top:50%; transform:translateY(-50%); }\n"
+                    + ".joy-center { position:absolute; width:34px; height:34px; left:50%; top:50%; transform:translate(-50%,-50%); border-radius:50%; background:#0c7c59; box-shadow:0 0 8px rgba(12,124,89,0.25); pointer-events:none; }\n"
                     + "#loaderOverlay { display:none; position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.7); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); z-index:9999; flex-direction:column; align-items:center; justify-content:center; }\n"
                     + "@keyframes spin { to { transform:rotate(360deg); } }\n"
                     + "@keyframes indeterminate { 0% { transform:translateX(-200%); } 100% { transform:translateX(200%); } }\n"
-// ── Point search dropdown styles ──
-                    + ".point-search-wrap {\n" +
-                    "  position: relative;\n" +
-                    "  width: 100%;\n" +
-                    "}\n"
+                    // ── Point search dropdown styles ──
+                    + ".point-search-wrap { position:relative; width:100%; }\n"
                     + ".point-search-input { width:100%; padding:8px 10px; border:1px solid #ccc; border-radius:4px; font-size:13px; box-sizing:border-box; }\n"
-                    + ".point-dropdown {\n" +
-                    "  position: absolute;\n" +
-                    "  top: calc(100% + 4px);\n" +
-                    "  left: 0;\n" +
-                    "  right: 0;\n" +
-                    "\n" +
-                    "  max-height: 260px;\n" +
-                    "  overflow-y: auto;\n" +
-                    "\n" +
-                    "  background: #fff;\n" +
-                    "  border: 1px solid #d0d7de;\n" +
-                    "  border-radius: 8px;\n" +
-                    "\n" +
-                    "  z-index: 1000;\n" +
-                    "\n" +
-                    "  box-shadow: 0 8px 24px rgba(0,0,0,0.12);\n" +
-                    "\n" +
-                    "  width: 100%;\n" +
-                    "}\n"
+                    + ".point-dropdown { position:absolute; top:calc(100% + 4px); left:0; right:0; max-height:260px; overflow-y:auto; background:#fff; border:1px solid #d0d7de; border-radius:8px; z-index:1000; box-shadow:0 8px 24px rgba(0,0,0,0.12); width:100%; }\n"
                     + ".point-dropdown-item { padding:10px 12px; cursor:pointer; font-size:13px; color:var(--text); border-bottom:1px solid #f0f0f0; }\n"
                     + ".point-dropdown-item:last-child { border-bottom:none; }\n"
                     + ".point-dropdown-item:hover { background:rgba(12,124,89,0.08); color:var(--accent); }\n"
                     + ".point-dropdown-item .pt-name { font-weight:600; margin-bottom:2px; }\n"
                     + ".point-dropdown-item .pt-path { font-size:10px; color:var(--muted); word-break:break-all; white-space:normal; line-height:1.4; }\n"
                     + ".point-search-refresh { float:right; background:none; border:none; color:var(--accent); cursor:pointer; font-size:12px; padding:0; margin-left:6px; text-decoration:underline; }\n"
-// ── 3D label overlay ──
+                    // ── 3D label overlay ──
                     + ".model-label { position:absolute; pointer-events:all; cursor:pointer; z-index:500; transform:translate(-50%,-100%); }\n"
-                    + ".model-label-inner { background:rgba(20,42,61,0.88); color:#fff; padding:6px 10px; border-radius:8px; font-size:12px; font-weight:600; white-space:nowrap; box-shadow:0 4px 16px rgba(0,0,0,0.25); border:1px solid rgba(255,255,255,0.15); display:flex; flex-direction:column; align-items:center; gap:2px; }\n"
+                    + ".model-label-inner { background:rgba(20,42,61,0.88); color:#fff; padding:6px 10px; border-radius:8px; font-size:12px; font-weight:600; white-space:nowrap; box-shadow:0 4px 16px rgba(0,0,0,0.25); border:1px solid rgba(255,255,255,0.15); display:flex; flex-direction:column; align-items:center; gap:2px; transition:background 0.2s; }\n"
+                    + ".model-label-inner:hover { background:rgba(12,124,89,0.92); }\n"
                     + ".model-label-name { font-size:10px; font-weight:500; opacity:0.7; text-transform:uppercase; letter-spacing:0.5px; }\n"
                     + ".model-label-value { font-size:15px; font-weight:700; color:#4cffa0; }\n"
                     + ".model-label-stem { width:2px; height:16px; background:rgba(20,42,61,0.7); margin:0 auto; }\n"
                     + ".model-label-dot  { width:8px; height:8px; background:#4cffa0; border-radius:50%; margin:0 auto; box-shadow:0 0 6px #4cffa0; }\n"
+                    // ── View Details Panel ──
+                    + "#tagDetailsPanel { display:none; position:absolute; top:80px; right:24px; background:#fff; border-radius:12px; box-shadow:0 8px 32px rgba(0,0,0,0.18); z-index:2000; width:320px; font-size:14px; border:1px solid #e2e8f0; overflow:hidden; animation:panelSlideIn 0.2s ease; }\n"
+                    + "@keyframes panelSlideIn { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }\n"
+                    + ".tdp-header { background:#1e293b; color:#fff; padding:16px 18px; display:flex; justify-content:space-between; align-items:flex-start; }\n"
+                    + ".tdp-header-title { font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; opacity:0.5; margin-bottom:3px; }\n"
+                    + ".tdp-header-name { font-size:17px; font-weight:700; line-height:1.2; }\n"
+                    + ".tdp-header-actions { display:flex; gap:6px; align-items:center; flex-shrink:0; margin-left:10px; }\n"
+                    + ".tdp-icon-btn { background:rgba(255,255,255,0.12); border:none; border-radius:7px; color:#fff; width:30px; height:30px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:14px; transition:background 0.2s; }\n"
+                    + ".tdp-icon-btn:hover { background:rgba(255,255,255,0.25); }\n"
+                    + ".tdp-body { padding:18px; }\n"
+                    + ".tdp-value-row { display:flex; align-items:center; gap:12px; margin-bottom:16px; }\n"
+                    + ".tdp-value-big { font-size:38px; font-weight:800; color:#0f172a; line-height:1; }\n"
+                    + ".tdp-status-badge { padding:4px 10px; border-radius:20px; font-size:10px; font-weight:700; letter-spacing:0.6px; text-transform:uppercase; }\n"
+                    + ".tdp-status-active  { background:#dcfce7; color:#16a34a; }\n"
+                    + ".tdp-status-error   { background:#fee2e2; color:#dc2626; }\n"
+                    + ".tdp-status-unknown { background:#f1f5f9; color:#64748b; }\n"
+                    + ".tdp-meta { display:flex; flex-direction:column; gap:9px; border-top:1px solid #f1f5f9; padding-top:14px; }\n"
+                    + ".tdp-meta-row { display:flex; justify-content:space-between; align-items:flex-start; gap:8px; }\n"
+                    + ".tdp-meta-label { color:#94a3b8; font-weight:600; text-transform:uppercase; letter-spacing:0.4px; font-size:10px; white-space:nowrap; margin-top:1px; }\n"
+                    + ".tdp-meta-value { color:#334155; font-weight:600; font-size:12px; word-break:break-all; text-align:right; }\n"
+                    + ".tdp-go-btn { display:block; width:100%; margin-top:16px; padding:11px; background:#2563eb; color:#fff; border:none; border-radius:8px; font-size:14px; font-weight:700; cursor:pointer; transition:background 0.2s; letter-spacing:0.3px; }\n"
+                    + ".tdp-go-btn:hover { background:#1d4ed8; }\n"
+                    // ── Edit Tag Panel ──
+                    + "#tagEditPanel { display:none; position:absolute; top:80px; right:24px; background:#fff; border-radius:12px; box-shadow:0 8px 32px rgba(0,0,0,0.18); z-index:2100; width:360px; font-size:14px; border:1px solid #e2e8f0; overflow:hidden; animation:panelSlideIn 0.2s ease; }\n"
+                    + ".tep-header { background:#1e293b; color:#fff; padding:14px 18px; display:flex; justify-content:space-between; align-items:center; font-size:15px; font-weight:700; }\n"
+                    + ".tep-body { padding:18px; max-height:calc(100vh - 200px); overflow-y:auto; }\n"
+                    + ".tep-field { margin-bottom:14px; }\n"
+                    + ".tep-label { display:block; margin-bottom:5px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.6px; color:#94a3b8; }\n"
+                    + ".tep-input { width:100%; padding:9px 11px; border:1px solid #e2e8f0; border-radius:7px; font-size:13px; color:#0f172a; box-sizing:border-box; }\n"
+                    + ".tep-input:focus { outline:none; border-color:#2563eb; box-shadow:0 0 0 3px rgba(37,99,235,0.12); }\n"
+                    + ".tep-actions { display:flex; gap:8px; justify-content:flex-end; margin-top:6px; padding-top:14px; border-top:1px solid #f1f5f9; }\n"
+                    + ".tep-cancel { padding:8px 16px; border:1px solid #e2e8f0; background:#fff; border-radius:7px; cursor:pointer; font-size:13px; font-weight:600; color:#64748b; }\n"
+                    + ".tep-cancel:hover { background:#f8fafc; }\n"
+                    + ".tep-save { padding:8px 16px; border:none; background:#0c7c59; color:#fff; border-radius:7px; cursor:pointer; font-size:13px; font-weight:700; }\n"
+                    + ".tep-save:hover { background:#095b42; }\n"
+                    + ".tep-danger { padding:8px 16px; border:none; background:#fee2e2; color:#dc2626; border-radius:7px; cursor:pointer; font-size:13px; font-weight:700; }\n"
+                    + ".tep-danger:hover { background:#fecaca; }\n"
+                    + ".repick-btn { margin-top:6px; padding:7px 12px; border:1px dashed var(--accent); background:rgba(12,124,89,0.05); color:var(--accent); border-radius:6px; cursor:pointer; font-size:12px; font-weight:600; display:inline-flex; align-items:center; gap:6px; }\n"
+                    + ".repick-btn.active { background:rgba(12,124,89,0.15); border-style:solid; }\n"
+                    + ".repick-btn:hover { background:rgba(12,124,89,0.1); }\n"
                     + "</style>\n"
                     + "</head>\n"
                     + "<body>\n"
-// TOP BAR
+                    // TOP BAR
                     + "<div class=\"top-bar\">\n"
                     + "  <div>3D Object Viewer</div>\n"
                     + "  <div style=\"display:flex;gap:10px;\">\n"
@@ -535,7 +408,7 @@ public class ObjectViewerRoute {
                     + "    <button onclick=\"logout()\">Logout</button>\n"
                     + "  </div>\n"
                     + "</div>\n"
-// LOADER
+                    // LOADER
                     + "<div id=\"loaderOverlay\">\n"
                     + "  <div style=\"width:40px;height:40px;border:4px solid rgba(37,99,235,0.2);border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;margin-bottom:16px;\"></div>\n"
                     + "  <div id=\"loaderText\" style=\"font-size:16px;font-weight:600;color:var(--text);margin-bottom:12px;\">Loading...</div>\n"
@@ -545,7 +418,7 @@ public class ObjectViewerRoute {
                     + "  <div id=\"loaderPercent\" style=\"font-size:13px;color:var(--muted);font-weight:500;\"></div>\n"
                     + "</div>\n"
                     + "<main class=\"app-container\">\n"
-// SIDEBAR
+                    // SIDEBAR
                     + "  <section class=\"sidebar\">\n"
                     + "    <div class=\"sidebar-header\">\n"
                     + "      <h2>Models</h2>\n"
@@ -560,54 +433,34 @@ public class ObjectViewerRoute {
                     + "      <p id=\"status\" class=\"status\">Viewer ready.</p>\n"
                     + "    </div>\n"
                     + "  </section>\n"
-// VIEWER
+                    // VIEWER
                     + "  <section class=\"viewer-shell\">\n"
                     + "    <div class=\"viewer-badge\">Orbit: drag · Scroll: zoom</div>\n"
                     + "    <div id=\"cameraNav\" class=\"camera-nav\" style=\"display:none;\"></div>\n"
-                    +"<div class=\"remote-control\">\n" +
-                    "\n" +
-                    "    <button class=\"zoom-btn zoom-in\"\n" +
-                    "            onclick=\"zoomIn()\">+</button>\n" +
-                    "\n" +
-                    "    <button class=\"zoom-btn zoom-out\"\n" +
-                    "            onclick=\"zoomOut()\">−</button>\n" +
-                    "\n" +
-                    "    <button class=\"home-btn\"\n" +
-                    "            onclick=\"resetCamera()\">⌂</button>\n" +
-                    "\n" +
-                    "  <div class=\"joystick\">\n" +
-                    "\n" +
-                    "      <button class=\"joy-btn joy-up\"\n" +
-                    "              onclick=\"moveCamera('up')\">▲</button>\n" +
-                    "\n" +
-                    "      <button class=\"joy-btn joy-left\"\n" +
-                    "              onclick=\"moveCamera('left')\">◀</button>\n" +
-                    "\n" +
-                    "      <button class=\"joy-btn joy-right\"\n" +
-                    "              onclick=\"moveCamera('right')\">▶</button>\n" +
-                    "\n" +
-                    "      <button class=\"joy-btn joy-down\"\n" +
-                    "              onclick=\"moveCamera('down')\">▼</button>\n" +
-                    "\n" +
-                    "      <div class=\"joy-center\"></div>\n" +
-                    "\n" +
-                    "  </div>\n" +
-                    "\n" +
-                    "</div>"
-// ── Tag Creator UI ──
+                    // Remote control
+                    + "    <div class=\"remote-control\">\n"
+                    + "      <button class=\"zoom-btn\" onclick=\"zoomIn()\">+</button>\n"
+                    + "      <button class=\"zoom-btn\" onclick=\"zoomOut()\">−</button>\n"
+                    + "      <button class=\"home-btn\" onclick=\"resetCamera()\">⌂</button>\n"
+                    + "      <div class=\"joystick\">\n"
+                    + "        <button class=\"joy-btn joy-up\"    onclick=\"moveCamera('up')\">▲</button>\n"
+                    + "        <button class=\"joy-btn joy-left\"  onclick=\"moveCamera('left')\">◀</button>\n"
+                    + "        <button class=\"joy-btn joy-right\" onclick=\"moveCamera('right')\">▶</button>\n"
+                    + "        <button class=\"joy-btn joy-down\"  onclick=\"moveCamera('down')\">▼</button>\n"
+                    + "        <div class=\"joy-center\"></div>\n"
+                    + "      </div>\n"
+                    + "    </div>\n"
+                    // Tag Creator UI
                     + "    <div id=\"tagCreatorUI\" style=\"display:none;position:absolute;top:80px;right:24px;background:rgba(255,255,255,0.97);padding:18px;border-radius:10px;box-shadow:var(--shadow);z-index:1000;width:360px;font-size:14px;border:1px solid var(--panel-border);\">\n"
                     + "      <h4 style=\"margin:0 0 14px 0;color:var(--text);\">Create New Tag</h4>\n"
-// Tag Name
                     + "      <div style=\"margin-bottom:12px;\">\n"
                     + "        <label style=\"display:block;margin-bottom:4px;color:var(--muted);font-weight:500;font-size:12px;\">TAG NAME</label>\n"
                     + "        <input type=\"text\" id=\"tagNameInput\" placeholder=\"e.g. Filter Check\" style=\"width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;font-size:13px;box-sizing:border-box;\">\n"
                     + "      </div>\n"
-// Focus Part
                     + "      <div style=\"margin-bottom:12px;\">\n"
                     + "        <label style=\"display:block;margin-bottom:4px;color:var(--muted);font-weight:500;font-size:12px;\">FOCUS PART (click model)</label>\n"
                     + "        <div id=\"tagTargetDisplay\" style=\"width:100%;padding:8px;background:#f0f4f8;border:1px solid #d9e4ec;border-radius:4px;font-size:13px;color:var(--text);min-height:35px;word-break:break-all;\">Click a part on the 3D model...</div>\n"
                     + "      </div>\n"
-// Niagara Point Search
                     + "      <div style=\"margin-bottom:16px;\">\n"
                     + "        <label style=\"display:block;margin-bottom:4px;color:var(--muted);font-weight:500;font-size:12px;\">NIAGARA POINT (search &amp; select) <button class=\"point-search-refresh\" onclick=\"reloadPoints()\">↻ refresh</button></label>\n"
                     + "        <div class=\"point-search-wrap\" id=\"pointSearchWrap\">\n"
@@ -621,18 +474,74 @@ public class ObjectViewerRoute {
                     + "        <button onclick=\"saveNewTag()\" style=\"padding:6px 12px;border:none;background:var(--accent);color:white;border-radius:4px;cursor:pointer;font-weight:500;font-size:13px;\">Save Tag</button>\n"
                     + "      </div>\n"
                     + "    </div>\n"
-// Label overlay container
+                    // ── View Details Panel ──
+                    + "    <div id=\"tagDetailsPanel\">\n"
+                    + "      <div class=\"tdp-header\">\n"
+                    + "        <div style=\"flex:1;min-width:0;\">\n"
+                    + "          <div class=\"tdp-header-title\" id=\"tdpTagLabel\">TAG</div>\n"
+                    + "          <div class=\"tdp-header-name\" id=\"tdpTagName\">—</div>\n"
+                    + "        </div>\n"
+                    + "        <div class=\"tdp-header-actions\">\n"
+                    + "          <button class=\"tdp-icon-btn\" title=\"Edit tag\" onclick=\"openEditPanel()\">✏️</button>\n"
+                    + "          <button class=\"tdp-icon-btn\" title=\"Close\" onclick=\"closeDetailsPanel()\">✕</button>\n"
+                    + "        </div>\n"
+                    + "      </div>\n"
+                    + "      <div class=\"tdp-body\">\n"
+                    + "        <div class=\"tdp-value-row\">\n"
+                    + "          <div class=\"tdp-value-big\" id=\"tdpValue\">—</div>\n"
+                    + "          <span class=\"tdp-status-badge tdp-status-unknown\" id=\"tdpStatusBadge\">UNKNOWN</span>\n"
+                    + "        </div>\n"
+                    + "        <div class=\"tdp-meta\">\n"
+                    + "          <div class=\"tdp-meta-row\"><span class=\"tdp-meta-label\">LAST POLL</span><span class=\"tdp-meta-value\" id=\"tdpLastPoll\">—</span></div>\n"
+                    + "          <div class=\"tdp-meta-row\"><span class=\"tdp-meta-label\">POINT PATH</span><span class=\"tdp-meta-value\" id=\"tdpPath\" style=\"font-size:11px;\">—</span></div>\n"
+                    + "          <div class=\"tdp-meta-row\"><span class=\"tdp-meta-label\">POSITION</span><span class=\"tdp-meta-value\" id=\"tdpPosition\">—</span></div>\n"
+                    + "        </div>\n"
+                    + "      </div>\n"
+                    + "    </div>\n"
+                    // ── Edit Tag Panel ──
+                    + "    <div id=\"tagEditPanel\">\n"
+                    + "      <div class=\"tep-header\">\n"
+                    + "        <span>Edit Tag</span>\n"
+                    + "        <button class=\"tdp-icon-btn\" onclick=\"closeEditPanel()\">✕</button>\n"
+                    + "      </div>\n"
+                    + "      <div class=\"tep-body\">\n"
+                    + "        <div class=\"tep-field\">\n"
+                    + "          <label class=\"tep-label\">Tag Name</label>\n"
+                    + "          <input type=\"text\" class=\"tep-input\" id=\"tepNameInput\" placeholder=\"e.g. Filter Status\">\n"
+                    + "        </div>\n"
+                    + "        <div class=\"tep-field\">\n"
+                    + "          <label class=\"tep-label\">Niagara Point <button class=\"point-search-refresh\" onclick=\"reloadPointsEdit()\">↻ refresh</button></label>\n"
+                    + "          <div class=\"point-search-wrap\" id=\"pointSearchWrapEdit\">\n"
+                    + "            <input type=\"text\" id=\"pointSearchInputEdit\" class=\"point-search-input\" placeholder=\"Type to search points...\" autocomplete=\"off\">\n"
+                    + "            <div class=\"point-dropdown\" id=\"pointDropdownEdit\" style=\"display:none;\"></div>\n"
+                    + "          </div>\n"
+                    + "          <div id=\"selectedPointDisplayEdit\" style=\"margin-top:6px;padding:6px 8px;background:#f0f4f8;border-radius:4px;font-size:11px;color:var(--muted);display:none;\"></div>\n"
+                    + "        </div>\n"
+                    + "        <div class=\"tep-field\">\n"
+                    + "          <label class=\"tep-label\">Tag Position (3D World Point)</label>\n"
+                    + "          <div id=\"tepPositionDisplay\" style=\"padding:8px 10px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:7px;font-size:12px;color:#64748b;font-family:monospace;\">—</div>\n"
+                    + "          <button id=\"repickBtn\" class=\"repick-btn\" onclick=\"enableRePickMode()\">📍 Re-pick Position from Model</button>\n"
+                    + "          <div id=\"repickHint\" style=\"display:none;margin-top:6px;padding:7px 10px;background:rgba(12,124,89,0.08);border-radius:6px;font-size:11px;color:var(--accent);font-weight:600;\">✅ Click any part of the 3D model to update position...</div>\n"
+                    + "        </div>\n"
+                    + "        <div class=\"tep-actions\">\n"
+                    + "          <button class=\"tep-danger\" onclick=\"deleteCurrentTag()\">🗑 Delete</button>\n"
+                    + "          <button class=\"tep-cancel\" onclick=\"closeEditPanel()\">Cancel</button>\n"
+                    + "          <button class=\"tep-save\" onclick=\"saveEditedTag()\">Save Changes</button>\n"
+                    + "        </div>\n"
+                    + "      </div>\n"
+                    + "    </div>\n"
+                    // Label overlay container
                     + "    <div id=\"labelContainer\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:200;\"></div>\n"
                     + "    <div id=\"viewer\"></div>\n"
                     + "  </section>\n"
                     + "</main>\n"
-// Scripts
+                    // Scripts
                     + "<script src=\"https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js\"></script>\n"
                     + "<script src=\"https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js\"></script>\n"
                     + "<script src=\"https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js\"></script>\n"
                     + "<script src=\"https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js\"></script>\n"
                     + "<script>\n"
-// ─── GLOBALS ───
+                    // ─── GLOBALS ───
                     + "let virtualFS = [];\n"
                     + "let activeFolderId = null;\n"
                     + "let activeFileId   = null;\n"
@@ -644,11 +553,11 @@ public class ObjectViewerRoute {
                     + "const cameraNav               = document.getElementById('cameraNav');\n"
                     + "const labelContainer          = document.getElementById('labelContainer');\n"
                     + "document.querySelector('.viewer-shell').prepend(document.getElementById('loaderOverlay'));\n"
-// ─── POINT CACHE ───
-                    + "let allNiagaraPoints = [];  // {name, path, value}\n"
+                    // ─── POINT CACHE ───
+                    + "let allNiagaraPoints = [];\n"
                     + "let selectedPointPath = null;\n"
                     + "let selectedPointName = null;\n"
-// ─── UTILITY ───
+                    // ─── UTILITY ───
                     + "function setStatus(message) {\n"
                     + "  status.textContent = message;\n"
                     + "  const overlay    = document.getElementById('loaderOverlay');\n"
@@ -668,13 +577,13 @@ public class ObjectViewerRoute {
                     + "}\n"
                     + "function logout()       { window.location.href = '/'; }\n"
                     + "function openSettings() { alert('Settings coming soon'); }\n"
-// ─── GET MODEL URL ───
+                    // ─── GET MODEL URL ───
                     + "function getModelUrls(model) {\n"
                     + "  return model.fileNames.map(function(fileName) {\n"
                     + "    return '/getModel?path=' + encodeURIComponent(model.fullPath + '/' + fileName);\n"
                     + "  });\n"
                     + "}\n"
-// ─── POINT SEARCH ───
+                    // ─── POINT SEARCH ───
                     + "async function loadNiagaraPoints() {\n"
                     + "  try {\n"
                     + "    const res  = await fetch('/listPoints');\n"
@@ -694,124 +603,55 @@ public class ObjectViewerRoute {
                     + "  const results = filterPoints(inp.value);\n"
                     + "  positionAndShowDropdown(results);\n"
                     + "}\n"
-                    + "function normalizeSearchText(text) {\n" +
-                    "\n" +
-                    "  return (text || '')\n" +
-                    "    .toLowerCase()\n" +
-                    "    .replace(/\\$20/g, ' ')\n" +
-                    "    .replace(/%20/g, ' ')\n" +
-                    "    .replace(/[_-]/g, ' ')\n" +
-                    "    .replace(/\\s+/g, ' ')\n" +
-                    "    .trim();\n" +
-                    "\n" +
-                    "}\n" +
-                    "\n" +
-                    "function filterPoints(query) {\n" +
-                    "\n" +
-                    "  if (!query || !query.trim()) {\n" +
-                    "    return allNiagaraPoints.slice(0, 80);\n" +
-                    "  }\n" +
-                    "\n" +
-                    "  const q = normalizeSearchText(query);\n" +
-                    "\n" +
-                    "  return allNiagaraPoints.filter(function(p) {\n" +
-                    "\n" +
-                    "    const name =\n" +
-                    "      normalizeSearchText(p.name);\n" +
-                    "\n" +
-                    "    const displayName =\n" +
-                    "      normalizeSearchText(p.displayName);\n" +
-                    "\n" +
-                    "    const path =\n" +
-                    "      normalizeSearchText(p.path);\n" +
-                    "\n" +
-                    "    return (\n" +
-                    "      name.includes(q) ||\n" +
-                    "      displayName.includes(q) ||\n" +
-                    "      path.includes(q)\n" +
-                    "    );\n" +
-                    "\n" +
-                    "  }).slice(0, 80);\n" +
-                    "\n" +
-                    "}\n"
-                    + "function positionAndShowDropdown(items) {\n"
-                    + "  const inp = document.getElementById('pointSearchInput');\n"
-                    + "  const dd  = document.getElementById('pointDropdown');\n"
-                    + "  // Position fixed dropdown under the input\n"
-                    + "  renderPointDropdown(items);\n"
+                    + "function normalizeSearchText(text) {\n"
+                    + "  return (text || '').toLowerCase().replace(/\\$20/g,' ').replace(/%20/g,' ').replace(/[_-]/g,' ').replace(/\\s+/g,' ').trim();\n"
                     + "}\n"
+                    + "function filterPoints(query) {\n"
+                    + "  if (!query || !query.trim()) return allNiagaraPoints.slice(0, 80);\n"
+                    + "  const q = normalizeSearchText(query);\n"
+                    + "  return allNiagaraPoints.filter(function(p) {\n"
+                    + "    return normalizeSearchText(p.name).includes(q) || normalizeSearchText(p.displayName).includes(q) || normalizeSearchText(p.path).includes(q);\n"
+                    + "  }).slice(0, 80);\n"
+                    + "}\n"
+                    + "function positionAndShowDropdown(items) { renderPointDropdown(items); }\n"
                     + "function renderPointDropdown(items) {\n"
                     + "  const dd = document.getElementById('pointDropdown');\n"
                     + "  dd.innerHTML = '';\n"
                     + "  if (items.length === 0) {\n"
-                    + "    dd.innerHTML = '<div class=\"point-dropdown-item\" style=\"color:var(--muted);\">No points found — try ↻ refresh if point is new</div>';\n"
-                    + "    dd.style.display = 'block';\n"
-                    + "    return;\n"
+                    + "    dd.innerHTML = '<div class=\"point-dropdown-item\" style=\"color:var(--muted);\">No points found — try ↻ refresh</div>';\n"
+                    + "    dd.style.display = 'block'; return;\n"
                     + "  }\n"
                     + "  items.forEach(function(pt) {\n"
                     + "    const div = document.createElement('div');\n"
                     + "    div.className = 'point-dropdown-item';\n"
-                    + "    const label = pt.displayName || pt.name;\n"
-                    + "    div.innerHTML =\n"
-                    + "      '<div class=\"pt-name\">' + pt.name + '</div>'\n"
-                    + "      + '<div class=\"pt-path\">' + label + '</div>';\n"
+                    + "    div.innerHTML = '<div class=\"pt-name\">' + pt.name + '</div><div class=\"pt-path\">' + (pt.displayName || pt.name) + '</div>';\n"
                     + "    div.onclick = function() { selectPoint(pt); };\n"
                     + "    dd.appendChild(div);\n"
                     + "  });\n"
                     + "  dd.style.display = 'block';\n"
                     + "}\n"
-                    + "function selectPoint(pt) {\n" +
-                    "\n" +
-                    "  selectedPointPath = pt.path;\n" +
-                    "  selectedPointName = pt.name;\n" +
-                    "\n" +
-                    "  document.getElementById('pointSearchInput').value =\n" +
-                    "      pt.displayName || pt.name;\n" +
-                    "\n" +
-                    "  // ✅ CLOSE DROPDOWN AFTER SELECT\n" +
-                    "  document.getElementById('pointDropdown').style.display = 'none';\n" +
-                    "\n" +
-                    "  const disp =\n" +
-                    "      document.getElementById('selectedPointDisplay');\n" +
-                    "\n" +
-                    "  disp.style.display = 'block';\n" +
-                    "\n" +
-                    "  disp.innerHTML =\n" +
-                    "      '✅ <strong>' + pt.name + '</strong><br>' +\n" +
-                    "      '<span style=\"word-break:break-all;\">' +\n" +
-                    "      pt.path +\n" +
-                    "      '</span>';\n" +
-                    "}\n"
-// ─── SETUP POINT SEARCH INPUT EVENTS ───
+                    + "function selectPoint(pt) {\n"
+                    + "  selectedPointPath = pt.path;\n"
+                    + "  selectedPointName = pt.name;\n"
+                    + "  document.getElementById('pointSearchInput').value = pt.displayName || pt.name;\n"
+                    + "  document.getElementById('pointDropdown').style.display = 'none';\n"
+                    + "  const disp = document.getElementById('selectedPointDisplay');\n"
+                    + "  disp.style.display = 'block';\n"
+                    + "  disp.innerHTML = '\\u2705 <strong>' + pt.name + '</strong><br><span style=\"word-break:break-all;\">' + pt.path + '</span>';\n"
+                    + "}\n"
+                    // ─── SETUP POINT SEARCH INPUT EVENTS ───
                     + "function initPointSearch() {\n"
                     + "  const inp = document.getElementById('pointSearchInput');\n"
-                    + "  inp.addEventListener('input', function() {\n"
-                    + "    const results = filterPoints(inp.value);\n"
-                    + "    positionAndShowDropdown(results);\n"
-                    + "  });\n"
-                    + "  inp.addEventListener('focus', function () {\n" +
-                    "\n" +
-                    "    // show all points immediately on focus\n" +
-                    "\n" +
-                    "    const results =\n" +
-                    "        filterPoints(inp.value);\n" +
-                    "\n" +
-                    "    positionAndShowDropdown(results);\n" +
-                    "\n" +
-                    "});;\n"
+                    + "  inp.addEventListener('input', function() { positionAndShowDropdown(filterPoints(inp.value)); });\n"
+                    + "  inp.addEventListener('focus', function() { positionAndShowDropdown(filterPoints(inp.value)); });\n"
                     + "  document.addEventListener('click', function(e) {\n"
                     + "    const wrap = document.getElementById('pointSearchWrap');\n"
                     + "    const dd   = document.getElementById('pointDropdown');\n"
-                    + "    if (wrap && !wrap.contains(e.target) && dd && !dd.contains(e.target)) {\n"
-                    + "      dd.style.display = 'none';\n"
-                    + "    }\n"
+                    + "    if (wrap && !wrap.contains(e.target) && dd && !dd.contains(e.target)) dd.style.display = 'none';\n"
                     + "  });\n"
-                    + "  // Re-position on scroll/resize so fixed dropdown stays aligned\n"
-                    + "  window.addEventListener('resize', function() {\n"
-                    + "    document.getElementById('pointDropdown').style.display = 'none';\n"
-                    + "  });\n"
+                    + "  window.addEventListener('resize', function() { document.getElementById('pointDropdown').style.display = 'none'; });\n"
                     + "}\n"
-// ─── VIRTUAL FS ───
+                    // ─── VIRTUAL FS ───
                     + "function renderVirtualFS() {\n"
                     + "  const browser = document.getElementById('fileBrowser');\n"
                     + "  browser.innerHTML = '';\n"
@@ -851,6 +691,7 @@ public class ObjectViewerRoute {
                     + "            e.stopPropagation();\n"
                     + "            activeFileId = file.id;\n"
                     + "            renderVirtualFS();\n"
+                    + "            closeDetailsPanel();\n"
                     + "            if (file.type === 'server') {\n"
                     + "              loadModel({ label: file.name, fileNames: file.fileNames, fullPath: file.fullPath });\n"
                     + "            } else if (file.type === 'local') {\n"
@@ -866,7 +707,7 @@ public class ObjectViewerRoute {
                     + "    browser.appendChild(folderEl);\n"
                     + "  });\n"
                     + "}\n"
-// ─── BUILD FS ───
+                    // ─── BUILD FS ───
                     + "function buildFS(data, parentPath) {\n"
                     + "  parentPath = parentPath || '';\n"
                     + "  return data.map(function(folder) {\n"
@@ -889,7 +730,7 @@ public class ObjectViewerRoute {
                     + "  virtualFS  = buildFS(data);\n"
                     + "  renderVirtualFS();\n"
                     + "}\n"
-// ─── NEW FOLDER ───
+                    // ─── NEW FOLDER ───
                     + "document.getElementById('newFolderBtn').addEventListener('click', async function() {\n"
                     + "  const name = prompt('Enter folder name:');\n"
                     + "  if (!name || !name.trim()) return;\n"
@@ -900,7 +741,7 @@ public class ObjectViewerRoute {
                     + "    setStatus('Folder created: ' + name);\n"
                     + "  } catch (err) { alert('Folder creation failed: ' + err.message); }\n"
                     + "});\n"
-// ─── FILE UPLOAD ───
+                    // ─── FILE UPLOAD ───
                     + "fileInput.addEventListener('change', function() {\n"
                     + "  const file = fileInput.files[0];\n"
                     + "  if (!file || !activeFolderId) return;\n"
@@ -938,7 +779,7 @@ public class ObjectViewerRoute {
                     + "  xhr.send(file);\n"
                     + "  fileInput.value = '';\n"
                     + "});\n"
-// ─── CAMERA / TAG VIEWS ───
+                    // ─── CAMERA / TAG VIEWS ───
                     + "let allModelViews    = JSON.parse(localStorage.getItem('niagara_3d_all_views')) || {};\n"
                     + "let currentModelName = '';\n"
                     + "let views = {};\n"
@@ -960,7 +801,7 @@ public class ObjectViewerRoute {
                     + "    const btnContainer = document.createElement('div');\n"
                     + "    btnContainer.className = 'cam-btn';\n"
                     + "    btnContainer.style.cssText = 'padding:6px 8px 6px 16px;';\n"
-                    + "    btnContainer.onclick = function() { flyToView(id); };\n"
+                    + "    btnContainer.onclick = function() { openDetailsPanel(id); };\n"
                     + "    const textSpan = document.createElement('span');\n"
                     + "    textSpan.textContent = view.name.toUpperCase();\n"
                     + "    const deleteBtn = document.createElement('button');\n"
@@ -974,6 +815,7 @@ public class ObjectViewerRoute {
                     + "        delete views[id];\n"
                     + "        allModelViews[currentModelName] = views;\n"
                     + "        localStorage.setItem('niagara_3d_all_views', JSON.stringify(allModelViews));\n"
+                    + "        if (currentDetailViewId === id) closeDetailsPanel();\n"
                     + "        renderCameraNav();\n"
                     + "        refreshAllLabels();\n"
                     + "      }\n"
@@ -990,39 +832,25 @@ public class ObjectViewerRoute {
                     + "  addBtn.textContent = '+ ADD TAG';\n"
                     + "  nav.appendChild(addBtn);\n"
                     + "}\n"
-// ─── TAG CREATION ───
+                    // ─── TAG CREATION ───
                     + "let isCreatingTag     = false;\n"
                     + "let pendingTargetMesh  = null;\n"
                     + "let pendingTargetPoint = null;\n"
-                    + "function startCreateTag() {\n" +
-                    "  document.getElementById('tagCreatorUI').style.display = 'block';\n" +
-                    "\n" +
-                    "  document.getElementById('tagNameInput').value = '';\n" +
-                    "\n" +
-                    "  document.getElementById('tagTargetDisplay').innerText =\n" +
-                    "    'Click a part on the 3D model...';\n" +
-                    "\n" +
-                    "  document.getElementById('pointSearchInput').value = '';\n" +
-                    "\n" +
-                    "  document.getElementById('pointDropdown').style.display = 'none';\n" +
-                    "\n" +
-                    "  document.getElementById('selectedPointDisplay').style.display = 'none';\n" +
-                    "\n" +
-                    "  selectedPointPath = null;\n" +
-                    "  selectedPointName = null;\n" +
-                    "\n" +
-                    "  pendingTargetMesh = null;\n" +
-                    "  pendingTargetPoint = null;\n" +
-                    "\n" +
-                    "  isCreatingTag = true;\n" +
-                    "\n" +
-                    "  setStatus(\n" +
-                    "    'Tag Creation Mode: click a part on the model.'\n" +
-                    "  );\n" +
-                    "\n" +
-                    "  // ✅ ONLY LOAD CACHE\n" +
-                    "  loadNiagaraPoints();\n" +
-                    "}\n"
+                    + "function startCreateTag() {\n"
+                    + "  document.getElementById('tagCreatorUI').style.display = 'block';\n"
+                    + "  document.getElementById('tagDetailsPanel').style.display = 'none';\n"
+                    + "  document.getElementById('tagEditPanel').style.display = 'none';\n"
+                    + "  document.getElementById('tagNameInput').value = '';\n"
+                    + "  document.getElementById('tagTargetDisplay').innerText = 'Click a part on the 3D model...';\n"
+                    + "  document.getElementById('pointSearchInput').value = '';\n"
+                    + "  document.getElementById('pointDropdown').style.display = 'none';\n"
+                    + "  document.getElementById('selectedPointDisplay').style.display = 'none';\n"
+                    + "  selectedPointPath = null; selectedPointName = null;\n"
+                    + "  pendingTargetMesh = null; pendingTargetPoint = null;\n"
+                    + "  isCreatingTag = true;\n"
+                    + "  setStatus('Tag Creation Mode: click a part on the model.');\n"
+                    + "  loadNiagaraPoints();\n"
+                    + "}\n"
                     + "function cancelCreateTag() {\n"
                     + "  document.getElementById('tagCreatorUI').style.display = 'none';\n"
                     + "  isCreatingTag = false; pendingTargetMesh = null; pendingTargetPoint = null;\n"
@@ -1061,31 +889,26 @@ public class ObjectViewerRoute {
                     + "  gsap.to(camera.position, { x:view.pos.x, y:view.pos.y, z:view.pos.z, duration:1.5, ease:'power2.inOut' });\n"
                     + "  gsap.to(controls.target,  { x:view.target.x, y:view.target.y, z:view.target.z, duration:1.5, ease:'power2.inOut', onUpdate:function(){ controls.update(); } });\n"
                     + "}\n"
-// ─── LABEL OVERLAY SYSTEM ───
-                    + "var labelObjects = [];  // [{el, worldPos, viewId}]\n"
-                    + "var labelValueCache = {};  // viewId -> last fetched value\n"
+                    // ─── LABEL OVERLAY SYSTEM ───
+                    + "var labelObjects = [];\n"
                     + "var labelFetchInterval = null;\n"
-                    + "\n"
                     + "function clearAllLabels() {\n"
                     + "  labelObjects = [];\n"
                     + "  labelContainer.innerHTML = '';\n"
                     + "  if (labelFetchInterval) { clearInterval(labelFetchInterval); labelFetchInterval = null; }\n"
                     + "}\n"
-                    + "\n"
                     + "function refreshAllLabels() {\n"
                     + "  clearAllLabels();\n"
                     + "  for (var id in views) {\n"
                     + "    var view = views[id];\n"
-                    + "    if (!view.worldPoint) continue;  // old tags without worldPoint skip\n"
+                    + "    if (!view.worldPoint) continue;\n"
                     + "    createLabel(id, view);\n"
                     + "  }\n"
-                    + "  // Start polling for live values every 5s\n"
                     + "  if (Object.keys(views).some(function(id){ return !!views[id].pointPath; })) {\n"
                     + "    fetchAllLabelValues();\n"
                     + "    labelFetchInterval = setInterval(fetchAllLabelValues, 5000);\n"
                     + "  }\n"
                     + "}\n"
-                    + "\n"
                     + "function createLabel(viewId, view) {\n"
                     + "  var el = document.createElement('div');\n"
                     + "  el.className = 'model-label';\n"
@@ -1098,7 +921,7 @@ public class ObjectViewerRoute {
                     + "    + '</div>'\n"
                     + "    + '<div class=\"model-label-stem\"></div>'\n"
                     + "    + '<div class=\"model-label-dot\"></div>';\n"
-                    + "  el.onclick = function() { flyToView(viewId); };\n"
+                    + "  el.onclick = function(e) { e.stopPropagation(); openDetailsPanel(viewId); };\n"
                     + "  labelContainer.appendChild(el);\n"
                     + "  labelObjects.push({\n"
                     + "    el: el,\n"
@@ -1106,7 +929,6 @@ public class ObjectViewerRoute {
                     + "    viewId: viewId\n"
                     + "  });\n"
                     + "}\n"
-                    + "\n"
                     + "function updateLabelPositions() {\n"
                     + "  if (!camera || !renderer) return;\n"
                     + "  var width  = renderer.domElement.clientWidth;\n"
@@ -1115,14 +937,12 @@ public class ObjectViewerRoute {
                     + "    var pos = lbl.worldPos.clone().project(camera);\n"
                     + "    var x   = ( pos.x * 0.5 + 0.5) * width;\n"
                     + "    var y   = (-pos.y * 0.5 + 0.5) * height;\n"
-                    + "    // Hide if behind camera\n"
                     + "    if (pos.z > 1) { lbl.el.style.display = 'none'; return; }\n"
                     + "    lbl.el.style.display = '';\n"
                     + "    lbl.el.style.left = x + 'px';\n"
                     + "    lbl.el.style.top  = y + 'px';\n"
                     + "  });\n"
                     + "}\n"
-                    + "\n"
                     + "async function fetchAllLabelValues() {\n"
                     + "  for (var id in views) {\n"
                     + "    var view = views[id];\n"
@@ -1138,7 +958,182 @@ public class ObjectViewerRoute {
                     + "    }\n"
                     + "  }\n"
                     + "}\n"
-// ─── THREE.JS ───
+                    // ─── VIEW DETAILS PANEL ───
+                    + "var currentDetailViewId = null;\n"
+                    + "async function openDetailsPanel(viewId) {\n"
+                    + "  currentDetailViewId = viewId;\n"
+                    + "  var view = views[viewId];\n"
+                    + "  if (!view) return;\n"
+                    + "  flyToView(viewId);\n"
+                    + "  document.getElementById('tagCreatorUI').style.display = 'none';\n"
+                    + "  document.getElementById('tagEditPanel').style.display = 'none';\n"
+                    + "  document.getElementById('tdpTagLabel').textContent = 'TAG';\n"
+                    + "  document.getElementById('tdpTagName').textContent = view.name;\n"
+                    + "  document.getElementById('tdpPath').textContent = view.pointPath || '(no point linked)';\n"
+                    + "  var wp = view.worldPoint;\n"
+                    + "  document.getElementById('tdpPosition').textContent = wp\n"
+                    + "    ? ('x:' + wp.x.toFixed(2) + '  y:' + wp.y.toFixed(2) + '  z:' + wp.z.toFixed(2)) : '—';\n"
+                    + "  var valEl  = document.getElementById('tdpValue');\n"
+                    + "  var badge  = document.getElementById('tdpStatusBadge');\n"
+                    + "  var pollEl = document.getElementById('tdpLastPoll');\n"
+                    + "  document.getElementById('tagDetailsPanel').style.display = 'block';\n"
+                    + "  if (view.pointPath) {\n"
+                    + "    valEl.textContent = '...';\n"
+                    + "    badge.className = 'tdp-status-badge tdp-status-unknown';\n"
+                    + "    badge.textContent = 'POLLING';\n"
+                    + "    try {\n"
+                    + "      var res  = await fetch('/getPointValue?path=' + encodeURIComponent(view.pointPath));\n"
+                    + "      var data = await res.json();\n"
+                    + "      valEl.textContent = data.value;\n"
+                    + "      pollEl.textContent = new Date().toLocaleString();\n"
+                    + "      if (data.value === 'ERR' || data.status === 'error') {\n"
+                    + "        badge.className = 'tdp-status-badge tdp-status-error';\n"
+                    + "        badge.textContent = 'ERROR';\n"
+                    + "      } else {\n"
+                    + "        badge.className = 'tdp-status-badge tdp-status-active';\n"
+                    + "        badge.textContent = 'ACTIVE';\n"
+                    + "      }\n"
+                    + "    } catch(e) {\n"
+                    + "      valEl.textContent = 'ERR';\n"
+                    + "      badge.className = 'tdp-status-badge tdp-status-error';\n"
+                    + "      badge.textContent = 'ERROR';\n"
+                    + "      pollEl.textContent = '—';\n"
+                    + "    }\n"
+                    + "  } else {\n"
+                    + "    valEl.textContent = '—';\n"
+                    + "    badge.className = 'tdp-status-badge tdp-status-unknown';\n"
+                    + "    badge.textContent = 'NO POINT';\n"
+                    + "    pollEl.textContent = '—';\n"
+                    + "  }\n"
+                    + "}\n"
+                    + "function closeDetailsPanel() {\n"
+                    + "  document.getElementById('tagDetailsPanel').style.display = 'none';\n"
+                    + "  currentDetailViewId = null;\n"
+                    + "}\n"
+                    + "function tdpFlyTo() {\n"
+                    + "  if (currentDetailViewId) flyToView(currentDetailViewId);\n"
+                    + "}\n"
+                    // ─── EDIT TAG PANEL ───
+                    + "var editSelectedPointPath = null;\n"
+                    + "var editSelectedPointName = null;\n"
+                    + "var isRePickMode = false;\n"
+                    + "function openEditPanel() {\n"
+                    + "  if (!currentDetailViewId) return;\n"
+                    + "  var view = views[currentDetailViewId];\n"
+                    + "  document.getElementById('tagDetailsPanel').style.display = 'none';\n"
+                    + "  document.getElementById('tagEditPanel').style.display = 'block';\n"
+                    + "  document.getElementById('tepNameInput').value = view.name;\n"
+                    + "  editSelectedPointPath = view.pointPath || null;\n"
+                    + "  editSelectedPointName = view.pointName || null;\n"
+                    + "  var searchInp = document.getElementById('pointSearchInputEdit');\n"
+                    + "  searchInp.value = view.pointName || '';\n"
+                    + "  var dispEdit = document.getElementById('selectedPointDisplayEdit');\n"
+                    + "  if (view.pointPath) {\n"
+                    + "    dispEdit.style.display = 'block';\n"
+                    + "    dispEdit.innerHTML = '\\u2705 <strong>' + (view.pointName || '') + '</strong><br><span style=\"word-break:break-all;\">' + view.pointPath + '</span>';\n"
+                    + "  } else {\n"
+                    + "    dispEdit.style.display = 'none';\n"
+                    + "  }\n"
+                    + "  var wp = view.worldPoint;\n"
+                    + "  document.getElementById('tepPositionDisplay').textContent = wp\n"
+                    + "    ? ('x:' + wp.x.toFixed(3) + '  y:' + wp.y.toFixed(3) + '  z:' + wp.z.toFixed(3)) : '—';\n"
+                    + "  document.getElementById('pointDropdownEdit').style.display = 'none';\n"
+                    + "  document.getElementById('repickBtn').classList.remove('active');\n"
+                    + "  document.getElementById('repickHint').style.display = 'none';\n"
+                    + "  isRePickMode = false;\n"
+                    + "  initEditPointSearch();\n"
+                    + "}\n"
+                    + "function closeEditPanel() {\n"
+                    + "  document.getElementById('tagEditPanel').style.display = 'none';\n"
+                    + "  isRePickMode = false;\n"
+                    + "  document.getElementById('repickBtn').classList.remove('active');\n"
+                    + "  document.getElementById('repickHint').style.display = 'none';\n"
+                    + "  if (currentDetailViewId) openDetailsPanel(currentDetailViewId);\n"
+                    + "}\n"
+                    + "function saveEditedTag() {\n"
+                    + "  if (!currentDetailViewId) return;\n"
+                    + "  var name = document.getElementById('tepNameInput').value.trim();\n"
+                    + "  if (!name) { alert('Tag name cannot be empty.'); return; }\n"
+                    + "  views[currentDetailViewId].name = name;\n"
+                    + "  if (editSelectedPointPath) {\n"
+                    + "    views[currentDetailViewId].pointPath = editSelectedPointPath;\n"
+                    + "    views[currentDetailViewId].pointName = editSelectedPointName;\n"
+                    + "  }\n"
+                    + "  allModelViews[currentModelName] = views;\n"
+                    + "  localStorage.setItem('niagara_3d_all_views', JSON.stringify(allModelViews));\n"
+                    + "  renderCameraNav();\n"
+                    + "  refreshAllLabels();\n"
+                    + "  isRePickMode = false;\n"
+                    + "  document.getElementById('tagEditPanel').style.display = 'none';\n"
+                    + "  setStatus('Tag updated: ' + name);\n"
+                    + "  openDetailsPanel(currentDetailViewId);\n"
+                    + "}\n"
+                    + "function deleteCurrentTag() {\n"
+                    + "  if (!currentDetailViewId) return;\n"
+                    + "  var name = views[currentDetailViewId].name;\n"
+                    + "  if (!confirm('Delete tag \"' + name + '\"?')) return;\n"
+                    + "  delete views[currentDetailViewId];\n"
+                    + "  allModelViews[currentModelName] = views;\n"
+                    + "  localStorage.setItem('niagara_3d_all_views', JSON.stringify(allModelViews));\n"
+                    + "  document.getElementById('tagEditPanel').style.display = 'none';\n"
+                    + "  currentDetailViewId = null;\n"
+                    + "  isRePickMode = false;\n"
+                    + "  renderCameraNav();\n"
+                    + "  refreshAllLabels();\n"
+                    + "  setStatus('Tag deleted: ' + name);\n"
+                    + "}\n"
+                    + "function enableRePickMode() {\n"
+                    + "  isRePickMode = true;\n"
+                    + "  document.getElementById('repickBtn').classList.add('active');\n"
+                    + "  document.getElementById('repickHint').style.display = 'block';\n"
+                    + "  setStatus('Re-pick Mode ON: click any part of the 3D model to update position.');\n"
+                    + "}\n"
+                    // ─── EDIT PANEL POINT SEARCH ───
+                    + "function initEditPointSearch() {\n"
+                    + "  var inp = document.getElementById('pointSearchInputEdit');\n"
+                    + "  if (!inp) return;\n"
+                    + "  var newInp = inp.cloneNode(true);\n"
+                    + "  inp.parentNode.replaceChild(newInp, inp);\n"
+                    + "  newInp.addEventListener('input', function() { renderEditPointDropdown(filterPoints(newInp.value)); });\n"
+                    + "  newInp.addEventListener('focus', function() { renderEditPointDropdown(filterPoints(newInp.value)); });\n"
+                    + "  document.addEventListener('click', function(e) {\n"
+                    + "    var wrap = document.getElementById('pointSearchWrapEdit');\n"
+                    + "    var dd   = document.getElementById('pointDropdownEdit');\n"
+                    + "    if (wrap && !wrap.contains(e.target) && dd && !dd.contains(e.target)) dd.style.display='none';\n"
+                    + "  });\n"
+                    + "}\n"
+                    + "function renderEditPointDropdown(items) {\n"
+                    + "  var dd = document.getElementById('pointDropdownEdit');\n"
+                    + "  if (!dd) return;\n"
+                    + "  dd.innerHTML = '';\n"
+                    + "  if (items.length === 0) {\n"
+                    + "    dd.innerHTML = '<div class=\"point-dropdown-item\" style=\"color:var(--muted);\">No points found</div>';\n"
+                    + "    dd.style.display = 'block'; return;\n"
+                    + "  }\n"
+                    + "  items.forEach(function(pt) {\n"
+                    + "    var div = document.createElement('div');\n"
+                    + "    div.className = 'point-dropdown-item';\n"
+                    + "    div.innerHTML = '<div class=\"pt-name\">' + pt.name + '</div><div class=\"pt-path\">' + (pt.displayName || pt.name) + '</div>';\n"
+                    + "    div.onclick = function() {\n"
+                    + "      editSelectedPointPath = pt.path;\n"
+                    + "      editSelectedPointName = pt.name;\n"
+                    + "      document.getElementById('pointSearchInputEdit').value = pt.displayName || pt.name;\n"
+                    + "      dd.style.display = 'none';\n"
+                    + "      var disp = document.getElementById('selectedPointDisplayEdit');\n"
+                    + "      disp.style.display = 'block';\n"
+                    + "      disp.innerHTML = '\\u2705 <strong>' + pt.name + '</strong><br><span style=\"word-break:break-all;\">' + pt.path + '</span>';\n"
+                    + "    };\n"
+                    + "    dd.appendChild(div);\n"
+                    + "  });\n"
+                    + "  dd.style.display = 'block';\n"
+                    + "}\n"
+                    + "async function reloadPointsEdit() {\n"
+                    + "  var inp = document.getElementById('pointSearchInputEdit');\n"
+                    + "  if (inp) inp.placeholder = 'Refreshing...';\n"
+                    + "  await loadNiagaraPoints();\n"
+                    + "  if (inp) { inp.placeholder = 'Type to search points...'; renderEditPointDropdown(filterPoints(inp.value)); }\n"
+                    + "}\n"
+                    // ─── THREE.JS ───
                     + "let THREE, scene, camera, renderer, controls, loader;\n"
                     + "let activeModel = null, modelContainer = null;\n"
                     + "let raycaster, mouse;\n"
@@ -1196,6 +1191,20 @@ public class ObjectViewerRoute {
                     + "      pendingTargetPoint = intersects[0].point;\n"
                     + "      document.getElementById('tagTargetDisplay').innerText = pendingTargetMesh.name || 'Unnamed Mesh';\n"
                     + "      setStatus('Selected: ' + (pendingTargetMesh.name || 'Unnamed') + '. Choose a point & Save.');\n"
+                    + "      return;\n"
+                    + "    }\n"
+                    + "    if (isRePickMode && currentDetailViewId) {\n"
+                    + "      var pt = intersects[0].point;\n"
+                    + "      views[currentDetailViewId].worldPoint = { x: pt.x, y: pt.y, z: pt.z };\n"
+                    + "      allModelViews[currentModelName] = views;\n"
+                    + "      localStorage.setItem('niagara_3d_all_views', JSON.stringify(allModelViews));\n"
+                    + "      document.getElementById('tepPositionDisplay').textContent =\n"
+                    + "        'x:' + pt.x.toFixed(3) + '  y:' + pt.y.toFixed(3) + '  z:' + pt.z.toFixed(3);\n"
+                    + "      isRePickMode = false;\n"
+                    + "      document.getElementById('repickBtn').classList.remove('active');\n"
+                    + "      document.getElementById('repickHint').style.display = 'none';\n"
+                    + "      refreshAllLabels();\n"
+                    + "      setStatus('\\u2705 Position updated for tag.');\n"
                     + "      return;\n"
                     + "    }\n"
                     + "    setStatus('Clicked: ' + (intersects[0].object.name || 'Unnamed Mesh'));\n"
@@ -1317,9 +1326,32 @@ public class ObjectViewerRoute {
                     + "  requestAnimationFrame(animate);\n"
                     + "  controls.update();\n"
                     + "  renderer.render(scene, camera);\n"
-                    + "  updateLabelPositions();\n"  // ← project labels every frame
+                    + "  updateLabelPositions();\n"
                     + "}\n"
-// ─── STARTUP ───
+                    // ─── CAMERA CONTROLS ───
+                    + "function zoomIn()  { camera.position.multiplyScalar(0.9); controls.update(); }\n"
+                    + "function zoomOut() { camera.position.multiplyScalar(1.1); controls.update(); }\n"
+                    + "function resetCamera() { if (!activeModel) return; frameModel(activeModel); }\n"
+                    + "function moveCamera(direction) {\n"
+                    + "  if (!camera || !controls) return;\n"
+                    + "  const moveSpeed = 0.8;\n"
+                    + "  const forward = new THREE.Vector3();\n"
+                    + "  camera.getWorldDirection(forward); forward.normalize();\n"
+                    + "  const right = new THREE.Vector3();\n"
+                    + "  right.crossVectors(forward, camera.up).normalize();\n"
+                    + "  const up = camera.up.clone().normalize();\n"
+                    + "  const move = new THREE.Vector3();\n"
+                    + "  switch(direction) {\n"
+                    + "    case 'up':    move.copy(up).multiplyScalar(moveSpeed); break;\n"
+                    + "    case 'down':  move.copy(up).multiplyScalar(-moveSpeed); break;\n"
+                    + "    case 'left':  move.copy(right).multiplyScalar(-moveSpeed); break;\n"
+                    + "    case 'right': move.copy(right).multiplyScalar(moveSpeed); break;\n"
+                    + "  }\n"
+                    + "  camera.position.add(move);\n"
+                    + "  controls.target.add(move);\n"
+                    + "  controls.update();\n"
+                    + "}\n"
+                    // ─── STARTUP ───
                     + "async function start() {\n"
                     + "  setStatus('Loading 3D library...');\n"
                     + "  THREE = loadThreeScripts();\n"
@@ -1327,7 +1359,7 @@ public class ObjectViewerRoute {
                     + "  animate();\n"
                     + "  setStatus('Viewer ready.');\n"
                     + "  initPointSearch();\n"
-                    + "  loadNiagaraPoints();\n"  // preload points in background
+                    + "  loadNiagaraPoints();\n"
                     + "  await loadFileSystem();\n"
                     + "  let firstModel = null;\n"
                     + "  for (const folder of virtualFS) {\n"
@@ -1342,75 +1374,6 @@ public class ObjectViewerRoute {
                     + "  }\n"
                     + "}\n"
                     + "start().catch(function(err) { console.error(err); setStatus('Startup error: ' + err.message); });\n"
-                   +"function zoomIn() {\n" +
-                    "\n" +
-                    "  camera.position.multiplyScalar(0.9);\n" +
-                    "\n" +
-                    "  controls.update();\n" +
-                    "\n" +
-                    "}\n" +
-                    "\n" +
-                    "function zoomOut() {\n" +
-                    "\n" +
-                    "  camera.position.multiplyScalar(1.1);\n" +
-                    "\n" +
-                    "  controls.update();\n" +
-                    "\n" +
-                    "}\n" +
-                    "\n" +
-                    "function resetCamera() {\n" +
-                    "\n" +
-                    "  if (!activeModel) return;\n" +
-                    "\n" +
-                    "  frameModel(activeModel);\n" +
-                    "\n" +
-                    "}\n" +
-                    "\n" +
-                    "function moveCamera(direction) {\n" +
-                    "    if (!camera || !controls) return;\n" +
-                    "\n" +
-                    "    const moveSpeed = 0.8;\n" +
-                    "\n" +
-                    "    // 1. Get the camera's local orientation vectors\n" +
-                    "    const forward = new THREE.Vector3();\n" +
-                    "    camera.getWorldDirection(forward);\n" +
-                    "    forward.normalize();\n" +
-                    "\n" +
-                    "    const right = new THREE.Vector3();\n" +
-                    "    right.crossVectors(forward, camera.up).normalize();\n" +
-                    "\n" +
-                    "    // We use the camera's actual 'up' vector for vertical movement\n" +
-                    "    const up = camera.up.clone().normalize();\n" +
-                    "\n" +
-                    "    const move = new THREE.Vector3();\n" +
-                    "\n" +
-                    "    switch(direction) {\n" +
-                    "        case 'up':\n" +
-                    "            // Move along the UP axis instead of FORWARD\n" +
-                    "            move.copy(up).multiplyScalar(moveSpeed);\n" +
-                    "            break;\n" +
-                    "\n" +
-                    "        case 'down':\n" +
-                    "            // Move along the negative UP axis\n" +
-                    "            move.copy(up).multiplyScalar(-moveSpeed);\n" +
-                    "            break;\n" +
-                    "\n" +
-                    "        case 'left':\n" +
-                    "            move.copy(right).multiplyScalar(-moveSpeed);\n" +
-                    "            break;\n" +
-                    "\n" +
-                    "        case 'right':\n" +
-                    "            move.copy(right).multiplyScalar(moveSpeed);\n" +
-                    "            break;\n" +
-                    "    }\n" +
-                    "\n" +
-                    "    // Apply the movement to both camera and the control target \n" +
-                    "    // This keeps the view angle consistent while sliding the \"view\"\n" +
-                    "    camera.position.add(move);\n" +
-                    "    controls.target.add(move);\n" +
-                    "\n" +
-                    "    controls.update();\n" +
-                    "}"
                     + "</script>\n"
                     + "</body>\n"
                     + "</html>";
