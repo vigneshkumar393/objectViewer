@@ -146,7 +146,13 @@ public class ObjectViewerRoute {
                                 if (files != null) {
                                     for (File f : files) {
                                         if (f.isFile()) {
-                                            filesArr.put(f.getName());
+
+                                            String name = f.getName().toLowerCase();
+
+                                            // ✅ ONLY .glb FILES
+                                            if (name.endsWith(".glb")) {
+                                                filesArr.put(f.getName());
+                                            }
                                         }
                                     }
                                 }
@@ -883,12 +889,34 @@ public class ObjectViewerRoute {
                     + "  setStatus('Viewer ready.');\n"
                     + "  await loadFileSystem();\n"
                     + "  // Auto-load first file if present\n"
-                    + "  if (virtualFS.length > 0 && virtualFS[0].files.length > 0) {\n"
-                    + "    const firstFile = virtualFS[0].files[0];\n"
-                    + "    activeFileId = firstFile.id;\n"
-                    + "    renderVirtualFS();\n"
-                    + "    loadModel({ label: firstFile.name, fileNames: firstFile.fileNames, folderName: firstFile.fullPath });\n"
-                    + "  }\n"
+                    + "  // Auto-load first .glb model\n" +
+                    "let firstModel = null;\n" +
+                    "\n" +
+                    "for (const folder of virtualFS) {\n" +
+                    "\n" +
+                    "    if (folder.files && folder.files.length > 0) {\n" +
+                    "\n" +
+                    "        firstModel = folder.files[0];\n" +
+                    "        break;\n" +
+                    "    }\n" +
+                    "}\n" +
+                    "\n" +
+                    "if (firstModel) {\n" +
+                    "\n" +
+                    "    activeFileId = firstModel.id;\n" +
+                    "\n" +
+                    "    renderVirtualFS();\n" +
+                    "\n" +
+                    "    loadModel({\n" +
+                    "        label: firstModel.name,\n" +
+                    "        fileNames: firstModel.fileNames,\n" +
+                    "        fullPath: firstModel.fullPath\n" +
+                    "    });\n" +
+                    "\n" +
+                    "} else {\n" +
+                    "\n" +
+                    "    setStatus('No model found to load.');\n" +
+                    "}\n"
                     + "}\n"
                     + "\n"
                     + "start().catch(function(err) {\n"
