@@ -327,6 +327,162 @@ public class ObjectViewerRoute {
                     + ".camera-nav { position:absolute; top:24px; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:12px; z-index:10; background:rgba(240,244,248,0.45); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); padding:14px 18px; border-radius:24px; box-shadow:0 12px 40px rgba(0,0,0,0.08),inset 0 1px 2px rgba(255,255,255,0.8); border:1px solid rgba(255,255,255,0.5); max-width:85%; }\n"
                     + ".cam-btn { background:rgba(255,255,255,0.95); border:1px solid rgba(0,0,0,0.04); color:var(--text); padding:10px 18px; border-radius:24px; font-size:11px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:6px; transition:all 0.3s cubic-bezier(0.2,0.8,0.2,1); text-transform:uppercase; letter-spacing:0.5px; white-space:nowrap; flex-shrink:0; box-shadow:0 2px 8px rgba(0,0,0,0.04); }\n"
                     + ".cam-btn:hover { background:var(--accent); color:white; transform:translateY(-2px) scale(1.02); box-shadow:0 8px 20px rgba(37,99,235,0.25); border-color:var(--accent); }\n"
+                    +".remote-control {\n" +
+                    "\n" +
+                    "  position: absolute;\n" +
+                    "\n" +
+                    "  right: 24px;\n" +
+                    "  bottom: 90px;\n" +
+                    "\n" +
+                    "  z-index: 3000;\n" +
+                    "\n" +
+                    "  display: flex;\n" +
+                    "  flex-direction: column;\n" +
+                    "  align-items: center;\n" +
+                    "\n" +
+                    "  gap: 12px;\n" +
+                    "}\n" +
+                    "\n" +
+                    ".zoom-btn,\n" +
+                    ".home-btn {\n" +
+                    "\n" +
+                    "  width: 44px;\n" +
+                    "  height: 44px;\n" +
+                    "\n" +
+                    "  border: 1px solid #dbe4ec;\n" +
+                    "\n" +
+                    "  border-radius: 12px;\n" +
+                    "\n" +
+                    "  background: rgba(255,255,255,0.96);\n" +
+                    "\n" +
+                    "  color: #334155;\n" +
+                    "\n" +
+                    "  font-size: 20px;\n" +
+                    "  font-weight: 600;\n" +
+                    "\n" +
+                    "  cursor: pointer;\n" +
+                    "\n" +
+                    "  box-shadow:\n" +
+                    "      0 2px 8px rgba(15,23,42,0.08);\n" +
+                    "\n" +
+                    "  transition: background 0.2s;\n" +
+                    "}\n" +
+                    "\n" +
+                    ".zoom-btn:hover,\n" +
+                    ".home-btn:hover {\n" +
+                    "\n" +
+                    "  background: #f1f5f9;\n" +
+                    "}\n" +
+                    "\n" +
+                    ".joystick {\n" +
+                    "\n" +
+                    "  position: relative;\n" +
+                    "\n" +
+                    "  width: 110px;\n" +
+                    "  height: 110px;\n" +
+                    "\n" +
+                    "  border-radius: 50%;\n" +
+                    "\n" +
+                    "  background: rgba(255,255,255,0.96);\n" +
+                    "\n" +
+                    "  border: 1px solid #dbe4ec;\n" +
+                    "\n" +
+                    "  box-shadow:\n" +
+                    "      0 4px 14px rgba(15,23,42,0.08);\n" +
+                    "}\n" +
+                    "\n" +
+                    ".joy-btn {\n" +
+                    "\n" +
+                    "  position: absolute;\n" +
+                    "\n" +
+                    "  width: 34px;\n" +
+                    "  height: 34px;\n" +
+                    "\n" +
+                    "  border: none;\n" +
+                    "\n" +
+                    "  border-radius: 10px;\n" +
+                    "\n" +
+                    "  background: #f8fafc;\n" +
+                    "\n" +
+                    "  color: #475569;\n" +
+                    "\n" +
+                    "  font-size: 14px;\n" +
+                    "  font-weight: bold;\n" +
+                    "\n" +
+                    "  cursor: pointer;\n" +
+                    "\n" +
+                    "  display: flex;\n" +
+                    "  align-items: center;\n" +
+                    "  justify-content: center;\n" +
+                    "\n" +
+                    "  box-shadow:\n" +
+                    "      inset 0 1px 1px rgba(255,255,255,0.7),\n" +
+                    "      0 1px 3px rgba(0,0,0,0.08);\n" +
+                    "}\n" +
+                    "\n" +
+                    ".joy-btn:hover {\n" +
+                    "\n" +
+                    "  background: #e2e8f0;\n" +
+                    "}\n" +
+                    "\n" +
+                    ".joy-btn:active {\n" +
+                    "\n" +
+                    "  background: #cbd5e1;\n" +
+                    "}\n" +
+                    "\n" +
+                    ".joy-up {\n" +
+                    "\n" +
+                    "  top: 8px;\n" +
+                    "  left: 50%;\n" +
+                    "\n" +
+                    "  transform: translateX(-50%);\n" +
+                    "}\n" +
+                    "\n" +
+                    ".joy-down {\n" +
+                    "\n" +
+                    "  bottom: 8px;\n" +
+                    "  left: 50%;\n" +
+                    "\n" +
+                    "  transform: translateX(-50%);\n" +
+                    "}\n" +
+                    "\n" +
+                    ".joy-left {\n" +
+                    "\n" +
+                    "  left: 8px;\n" +
+                    "  top: 50%;\n" +
+                    "\n" +
+                    "  transform: translateY(-50%);\n" +
+                    "}\n" +
+                    "\n" +
+                    ".joy-right {\n" +
+                    "\n" +
+                    "  right: 8px;\n" +
+                    "  top: 50%;\n" +
+                    "\n" +
+                    "  transform: translateY(-50%);\n" +
+                    "}\n" +
+                    "\n" +
+                    ".joy-center {\n" +
+                    "\n" +
+                    "  position: absolute;\n" +
+                    "\n" +
+                    "  width: 34px;\n" +
+                    "  height: 34px;\n" +
+                    "\n" +
+                    "  left: 50%;\n" +
+                    "  top: 50%;\n" +
+                    "\n" +
+                    "  transform: translate(-50%, -50%);\n" +
+                    "\n" +
+                    "  border-radius: 50%;\n" +
+                    "\n" +
+                    "  background: #0c7c59;\n" +
+                    "\n" +
+                    "  box-shadow:\n" +
+                    "      0 0 8px rgba(12,124,89,0.25);\n" +
+                    "\n" +
+                    "  pointer-events: none;\n" +
+                    "}"
                     + "#loaderOverlay { display:none; position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.7); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); z-index:9999; flex-direction:column; align-items:center; justify-content:center; }\n"
                     + "@keyframes spin { to { transform:rotate(360deg); } }\n"
                     + "@keyframes indeterminate { 0% { transform:translateX(-200%); } 100% { transform:translateX(200%); } }\n"
@@ -408,6 +564,36 @@ public class ObjectViewerRoute {
                     + "  <section class=\"viewer-shell\">\n"
                     + "    <div class=\"viewer-badge\">Orbit: drag · Scroll: zoom</div>\n"
                     + "    <div id=\"cameraNav\" class=\"camera-nav\" style=\"display:none;\"></div>\n"
+                    +"<div class=\"remote-control\">\n" +
+                    "\n" +
+                    "    <button class=\"zoom-btn zoom-in\"\n" +
+                    "            onclick=\"zoomIn()\">+</button>\n" +
+                    "\n" +
+                    "    <button class=\"zoom-btn zoom-out\"\n" +
+                    "            onclick=\"zoomOut()\">−</button>\n" +
+                    "\n" +
+                    "    <button class=\"home-btn\"\n" +
+                    "            onclick=\"resetCamera()\">⌂</button>\n" +
+                    "\n" +
+                    "  <div class=\"joystick\">\n" +
+                    "\n" +
+                    "      <button class=\"joy-btn joy-up\"\n" +
+                    "              onclick=\"moveCamera('up')\">▲</button>\n" +
+                    "\n" +
+                    "      <button class=\"joy-btn joy-left\"\n" +
+                    "              onclick=\"moveCamera('left')\">◀</button>\n" +
+                    "\n" +
+                    "      <button class=\"joy-btn joy-right\"\n" +
+                    "              onclick=\"moveCamera('right')\">▶</button>\n" +
+                    "\n" +
+                    "      <button class=\"joy-btn joy-down\"\n" +
+                    "              onclick=\"moveCamera('down')\">▼</button>\n" +
+                    "\n" +
+                    "      <div class=\"joy-center\"></div>\n" +
+                    "\n" +
+                    "  </div>\n" +
+                    "\n" +
+                    "</div>"
 // ── Tag Creator UI ──
                     + "    <div id=\"tagCreatorUI\" style=\"display:none;position:absolute;top:80px;right:24px;background:rgba(255,255,255,0.97);padding:18px;border-radius:10px;box-shadow:var(--shadow);z-index:1000;width:360px;font-size:14px;border:1px solid var(--panel-border);\">\n"
                     + "      <h4 style=\"margin:0 0 14px 0;color:var(--text);\">Create New Tag</h4>\n"
@@ -1156,6 +1342,75 @@ public class ObjectViewerRoute {
                     + "  }\n"
                     + "}\n"
                     + "start().catch(function(err) { console.error(err); setStatus('Startup error: ' + err.message); });\n"
+                   +"function zoomIn() {\n" +
+                    "\n" +
+                    "  camera.position.multiplyScalar(0.9);\n" +
+                    "\n" +
+                    "  controls.update();\n" +
+                    "\n" +
+                    "}\n" +
+                    "\n" +
+                    "function zoomOut() {\n" +
+                    "\n" +
+                    "  camera.position.multiplyScalar(1.1);\n" +
+                    "\n" +
+                    "  controls.update();\n" +
+                    "\n" +
+                    "}\n" +
+                    "\n" +
+                    "function resetCamera() {\n" +
+                    "\n" +
+                    "  if (!activeModel) return;\n" +
+                    "\n" +
+                    "  frameModel(activeModel);\n" +
+                    "\n" +
+                    "}\n" +
+                    "\n" +
+                    "function moveCamera(direction) {\n" +
+                    "    if (!camera || !controls) return;\n" +
+                    "\n" +
+                    "    const moveSpeed = 0.8;\n" +
+                    "\n" +
+                    "    // 1. Get the camera's local orientation vectors\n" +
+                    "    const forward = new THREE.Vector3();\n" +
+                    "    camera.getWorldDirection(forward);\n" +
+                    "    forward.normalize();\n" +
+                    "\n" +
+                    "    const right = new THREE.Vector3();\n" +
+                    "    right.crossVectors(forward, camera.up).normalize();\n" +
+                    "\n" +
+                    "    // We use the camera's actual 'up' vector for vertical movement\n" +
+                    "    const up = camera.up.clone().normalize();\n" +
+                    "\n" +
+                    "    const move = new THREE.Vector3();\n" +
+                    "\n" +
+                    "    switch(direction) {\n" +
+                    "        case 'up':\n" +
+                    "            // Move along the UP axis instead of FORWARD\n" +
+                    "            move.copy(up).multiplyScalar(moveSpeed);\n" +
+                    "            break;\n" +
+                    "\n" +
+                    "        case 'down':\n" +
+                    "            // Move along the negative UP axis\n" +
+                    "            move.copy(up).multiplyScalar(-moveSpeed);\n" +
+                    "            break;\n" +
+                    "\n" +
+                    "        case 'left':\n" +
+                    "            move.copy(right).multiplyScalar(-moveSpeed);\n" +
+                    "            break;\n" +
+                    "\n" +
+                    "        case 'right':\n" +
+                    "            move.copy(right).multiplyScalar(moveSpeed);\n" +
+                    "            break;\n" +
+                    "    }\n" +
+                    "\n" +
+                    "    // Apply the movement to both camera and the control target \n" +
+                    "    // This keeps the view angle consistent while sliding the \"view\"\n" +
+                    "    camera.position.add(move);\n" +
+                    "    controls.target.add(move);\n" +
+                    "\n" +
+                    "    controls.update();\n" +
+                    "}"
                     + "</script>\n"
                     + "</body>\n"
                     + "</html>";
