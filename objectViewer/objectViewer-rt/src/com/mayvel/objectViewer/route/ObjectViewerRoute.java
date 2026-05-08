@@ -574,14 +574,28 @@ public class ObjectViewerRoute {
                     + "  });\n"
                     + "  dd.style.display = 'block';\n"
                     + "}\n"
-                    + "function selectPoint(pt) {\n"
-                    + "  selectedPointPath = pt.path;\n"
-                    + "  selectedPointName = pt.name;\n"
-                    + "  document.getElementById('pointSearchInput').value = pt.displayName || pt.name;\n"
-                    + "  const disp = document.getElementById('selectedPointDisplay');\n"
-                    + "  disp.style.display = 'block';\n"
-                    + "  disp.innerHTML = '\\u2705 <strong>' + pt.name + '</strong><br><span style=\"word-break:break-all;\">' + pt.path + '</span>';\n"
-                    + "}\n"
+                    + "function selectPoint(pt) {\n" +
+                    "\n" +
+                    "  selectedPointPath = pt.path;\n" +
+                    "  selectedPointName = pt.name;\n" +
+                    "\n" +
+                    "  document.getElementById('pointSearchInput').value =\n" +
+                    "      pt.displayName || pt.name;\n" +
+                    "\n" +
+                    "  // ✅ CLOSE DROPDOWN AFTER SELECT\n" +
+                    "  document.getElementById('pointDropdown').style.display = 'none';\n" +
+                    "\n" +
+                    "  const disp =\n" +
+                    "      document.getElementById('selectedPointDisplay');\n" +
+                    "\n" +
+                    "  disp.style.display = 'block';\n" +
+                    "\n" +
+                    "  disp.innerHTML =\n" +
+                    "      '✅ <strong>' + pt.name + '</strong><br>' +\n" +
+                    "      '<span style=\"word-break:break-all;\">' +\n" +
+                    "      pt.path +\n" +
+                    "      '</span>';\n" +
+                    "}\n"
 // ─── SETUP POINT SEARCH INPUT EVENTS ───
                     + "function initPointSearch() {\n"
                     + "  const inp = document.getElementById('pointSearchInput');\n"
