@@ -573,16 +573,16 @@ public class ObjectViewerRoute {
                     + "    const results = filterPoints(inp.value);\n"
                     + "    positionAndShowDropdown(results);\n"
                     + "  });\n"
-                    + "  inp.addEventListener('focus', function() {\n" +
+                    + "  inp.addEventListener('focus', function () {\n" +
                     "\n" +
-                    "  // only open if already typing\n" +
-                    "  if (inp.value.trim().length > 0) {\n" +
+                    "    // show all points immediately on focus\n" +
                     "\n" +
-                    "    const results = filterPoints(inp.value);\n" +
+                    "    const results =\n" +
+                    "        filterPoints(inp.value);\n" +
                     "\n" +
                     "    positionAndShowDropdown(results);\n" +
-                    "  }\n" +
-                    "});\n"
+                    "\n" +
+                    "});;\n"
                     + "  document.addEventListener('click', function(e) {\n"
                     + "    const wrap = document.getElementById('pointSearchWrap');\n"
                     + "    const dd   = document.getElementById('pointDropdown');\n"
