@@ -664,6 +664,23 @@ public class ObjectViewerRoute {
                     + "let views = {};              // current model's tags (in memory)\n"
                     + "let currentModelName = '';   // e.g. 'AHU5'\n"
                     + "let currentModelFolder = ''; // e.g. '3d_models'\n"
+                    +"// ================= AUTH CHECK =================\n" +
+                    "const token = localStorage.getItem('token');\n" +
+                    "\n" +
+                    "if (!token) {\n" +
+                    "    window.location.replace('/');\n" +
+                    "}\n" +
+                    "\n" +
+                    "// prevent browser back cache\n" +
+                    "window.history.pushState(null, '', window.location.href);\n" +
+                    "\n" +
+                    "window.onpopstate = function () {\n" +
+                    "    const token = localStorage.getItem('token');\n" +
+                    "\n" +
+                    "    if (!token) {\n" +
+                    "        window.location.replace('/');\n" +
+                    "    }\n" +
+                    "};"
                     // ─── SERVER CONFIG PERSISTENCE ───
                     + "async function saveTagsToServer() {\n"
                     + "  if (!currentModelName || !currentModelFolder) return;\n"
@@ -708,7 +725,14 @@ public class ObjectViewerRoute {
                     + "    } else { overlay.style.display='none'; }\n"
                     + "  }\n"
                     + "}\n"
-                    + "function logout()       { window.location.href='/'; }\n"
+                    + "function logout() {\n" +
+                    "    localStorage.removeItem('token');\n" +
+                    "\n" +
+                    "    // prevent back button cache\n" +
+                    "    window.history.pushState(null, '', '/');\n" +
+                    "\n" +
+                    "    window.location.replace('/');\n" +
+                    "}\n"
                     + "function openSettings() { alert('Settings coming soon'); }\n"
                     + "function getModelUrls(model) {\n"
                     + "  return model.fileNames.map(function(fn) { return '/getModel?path='+encodeURIComponent(model.fullPath+'/'+fn); });\n"
@@ -1045,6 +1069,7 @@ public class ObjectViewerRoute {
                     + "function closeEditPanel() {\n"
                     + "  document.getElementById('tagEditPanel').style.display='none';\n"
                     + "  isRePickMode=false;\n"
+                    + "  hidePickBanner();\n"
                     + "  document.getElementById('repickBtn').classList.remove('active');\n"
                     + "  document.getElementById('repickHint').style.display='none';\n"
                     + "  if (currentDetailViewId) openDetailsPanel(currentDetailViewId);\n"
@@ -1075,7 +1100,29 @@ public class ObjectViewerRoute {
                     + "  isRePickMode=true;\n"
                     + "  document.getElementById('repickBtn').classList.add('active');\n"
                     + "  document.getElementById('repickHint').style.display='block';\n"
+                    + "  // Hide edit panel so it doesn't block model clicks\n"
+                    + "  document.getElementById('tagEditPanel').style.display='none';\n"
+                    + "  // Show floating pick banner\n"
+                    + "  showPickBanner();\n"
                     + "  setStatus('Re-pick Mode ON: click any part of the 3D model to update position.');\n"
+                    + "}\n"
+                    + "function showPickBanner() {\n"
+                    + "  var existing=document.getElementById('pickBanner');\n"
+                    + "  if (existing) existing.remove();\n"
+                    + "  var banner=document.createElement('div');\n"
+                    + "  banner.id='pickBanner';\n"
+                    + "  banner.style.cssText='position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);'\n"
+                    + "    +'background:rgba(12,124,89,0.93);color:#fff;padding:14px 24px;border-radius:12px;'\n"
+                    + "    +'font-size:15px;font-weight:700;z-index:9000;box-shadow:0 8px 32px rgba(0,0,0,0.25);'\n"
+                    + "    +'display:flex;align-items:center;gap:12px;pointer-events:none;';\n"
+                    + "  banner.innerHTML='<span style=\"font-size:22px;\">📍</span><div>'\n"
+                    + "    +'<div>Click any part of the 3D model</div>'\n"
+                    + "    +'<div style=\"font-size:12px;opacity:0.8;margin-top:2px;\">to update tag position</div>'\n"
+                    + "    +'</div>';\n"
+                    + "  document.querySelector('.viewer-shell').appendChild(banner);\n"
+                    + "}\n"
+                    + "function hidePickBanner() {\n"
+                    + "  var b=document.getElementById('pickBanner'); if(b) b.remove();\n"
                     + "}\n"
                     // ─── EDIT PANEL POINT SEARCH ───
                     + "function initEditPointSearch() {\n"
@@ -1161,12 +1208,15 @@ public class ObjectViewerRoute {
                     + "    if (isRePickMode&&currentDetailViewId) {\n"
                     + "      var pt=hits[0].point;\n"
                     + "      views[currentDetailViewId].worldPoint={x:pt.x,y:pt.y,z:pt.z};\n"
-                    + "      saveTagsToServer();\n"  // ← persist to server
-                    + "      document.getElementById('tepPositionDisplay').textContent='x:'+pt.x.toFixed(3)+'  y:'+pt.y.toFixed(3)+'  z:'+pt.z.toFixed(3);\n"
+                    + "      saveTagsToServer();\n"
                     + "      isRePickMode=false;\n"
+                    + "      hidePickBanner();\n"
+                    + "      // Restore edit panel with updated position\n"
+                    + "      document.getElementById('tagEditPanel').style.display='block';\n"
                     + "      document.getElementById('repickBtn').classList.remove('active');\n"
                     + "      document.getElementById('repickHint').style.display='none';\n"
-                    + "      refreshAllLabels(); setStatus('\\u2705 Position updated for tag.'); return;\n"
+                    + "      document.getElementById('tepPositionDisplay').textContent='x:'+pt.x.toFixed(3)+'  y:'+pt.y.toFixed(3)+'  z:'+pt.z.toFixed(3);\n"
+                    + "      refreshAllLabels(); setStatus('\\u2705 Position updated! Edit panel restored.'); return;\n"
                     + "    }\n"
                     + "    setStatus('Clicked: '+(hits[0].object.name||'Unnamed Mesh'));\n"
                     + "  }\n"
